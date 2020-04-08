@@ -6,8 +6,8 @@
 
 This repository is rewriting crudWithDb in typeScript.
 
-folder src - TS project
-folder dist - js compilation of TS project
+folder src - TS project.
+folder dist - js compilation of TS project.
 
 
 ## Installation
