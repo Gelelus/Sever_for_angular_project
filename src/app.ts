@@ -30,7 +30,7 @@ const port = process.env.PORT || 8080;
 
 app.use(express.json());
 app.use("/users", router.userRouter);
-app.use(express.static(__dirname + "/public"));
+app.use(express.static(process.cwd() + "/public"));
 
 app.listen(port, () => {
   console.log("server on port " + port);
