@@ -1,8 +1,8 @@
 import { Router } from "express"
 
 import validation from "../middleware/validation";
-import validCreateUser from "../dtos/create-user.dto.js"; //non TS types
-import validLoginUser from "../dtos/login-user.dto.js";   //non TS types
+import validCreateUser from "../dtos/create-user.dto"; 
+import validLoginUser from "../dtos/login-user.dto";   
 
 import auth from "../middleware/auth";
 
@@ -12,6 +12,9 @@ const user_controller = new UserController();
 const router = Router();
 
 router.post("/", validation(validCreateUser),  user_controller.addUser); //регистрация
+
+router.post("/pet", auth, user_controller.addPetToUser); // добавить питомца
+router.get("/pet/:id", auth, user_controller.getUserWithPets); // получение всех питомцов пользователя
 
 router.delete("/:id", auth, user_controller.deleteUser); // удаление
 router.put("/", auth, user_controller.updateUser); // изменение

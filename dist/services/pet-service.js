@@ -35,93 +35,70 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var mongoose_1 = __importStar(require("mongoose"));
-var bcryptjs_1 = __importDefault(require("bcryptjs"));
-var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-var userSchema = new mongoose_1.Schema({
-    name: {
-        type: String,
-        unique: true,
-        required: true,
-        trim: true
-    },
-    age: {
-        type: String,
-        required: true,
-        trim: true,
-    },
-    password: {
-        type: String,
-        required: true,
-        trim: true,
-    },
-    pets: [
-        {
-            type: mongoose_1.default.Schema.Types.ObjectId,
-            ref: 'Pet'
-        }
-    ],
-});
-userSchema.statics.findByCredentials = function (login, password) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, isMatch;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4, User.findOne({ name: login })];
-            case 1:
-                user = _a.sent();
-                if (!user) {
-                    throw new Error('Unable user');
-                }
-                return [4, bcryptjs_1.default.compare(password, user.password)];
-            case 2:
-                isMatch = _a.sent();
-                if (!isMatch) {
-                    throw new Error('Unable to login');
-                }
-                return [2, user];
-        }
-    });
-}); };
-userSchema.methods.generateAuthToken = function () {
+var pet_1 = __importDefault(require("../models/pet"));
+var add = function (data) {
     return __awaiter(this, void 0, void 0, function () {
-        var user, token;
+        var pet;
         return __generator(this, function (_a) {
-            user = this;
-            token = jsonwebtoken_1.default.sign({ _id: user._id.toString() }, 'expressapp');
-            return [2, token];
-        });
-    });
-};
-userSchema.pre('save', function (next) {
-    return __awaiter(this, void 0, void 0, function () {
-        var user, _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+            switch (_a.label) {
                 case 0:
-                    user = this;
-                    if (!user.isModified('password')) return [3, 2];
-                    _a = user;
-                    return [4, bcryptjs_1.default.hash(user.password, 8)];
+                    pet = new pet_1.default(data);
+                    return [4, pet.save()];
                 case 1:
-                    _a.password = _b.sent();
-                    _b.label = 2;
-                case 2:
-                    next();
-                    return [2];
+                    _a.sent();
+                    return [2, pet];
             }
         });
     });
-});
-var User = mongoose_1.model('User', userSchema);
-exports.default = User;
+};
+var get = function (id) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4, pet_1.default.findById(id)];
+                case 1: return [2, _a.sent()];
+            }
+        });
+    });
+};
+var getAll = function () {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4, pet_1.default.find({})];
+                case 1: return [2, _a.sent()];
+            }
+        });
+    });
+};
+var update = function (data) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4, pet_1.default.findByIdAndUpdate(data.id, data, { new: true })];
+                case 1: return [2, _a.sent()];
+            }
+        });
+    });
+};
+var del = function (id) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4, pet_1.default.findByIdAndDelete(id)];
+                case 1: return [2, _a.sent()];
+            }
+        });
+    });
+};
+exports.default = {
+    add: add,
+    get: get,
+    update: update,
+    del: del,
+    getAll: getAll
+};

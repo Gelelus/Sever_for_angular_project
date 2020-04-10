@@ -64,6 +64,7 @@ const CreateUser = async (userName, userAge, userPassword) => {
     }
 }
 
+
 // Изменение пользователя
 const EditUser = async (userId, userName, userAge) => {
     let data = {
@@ -135,6 +136,7 @@ const LoginUser = async (userName, userPassword) => {
         // console.log(user.token)
         localStorage.setItem('token', user.token)
         localStorage.setItem('name', user.user.name)
+        localStorage.setItem('id', user.user._id)
         document.forms["authForm"].reset();
         document.forms["authForm"].hidden = 'true'
         document.getElementById('logoutDiv').hidden = false
@@ -157,6 +159,8 @@ const LogoutUser = async () => {
     let user = await response.json();
     console.log(user)
     localStorage.removeItem('token')
+    localStorage.removeItem('id')
+    localStorage.removeItem('name')
     document.forms["authForm"].hidden = false
     document.getElementById('logoutDiv').hidden = true
 }

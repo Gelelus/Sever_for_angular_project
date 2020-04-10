@@ -39,17 +39,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var user_service_1 = __importDefault(require("../services/user-service"));
+var pet_service_1 = __importDefault(require("../services/pet-service"));
 var UserController = (function () {
     function UserController() {
         var _this = this;
-        this.addUser = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+        this.addPet = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
             var result, e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4, user_service_1.default.add(req.body)];
+                        return [4, pet_service_1.default.add(req.body)];
                     case 1:
                         result = _a.sent();
                         res.status(201).send(result);
@@ -62,13 +62,13 @@ var UserController = (function () {
                 }
             });
         }); };
-        this.deleteUser = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+        this.deletePet = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
             var result, e_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4, user_service_1.default.del(req.params.id)];
+                        return [4, pet_service_1.default.del(req.params.id)];
                     case 1:
                         result = _a.sent();
                         res.status(201).send(result);
@@ -81,13 +81,13 @@ var UserController = (function () {
                 }
             });
         }); };
-        this.updateUser = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+        this.updatePet = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
             var result, e_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4, user_service_1.default.update(req.body)];
+                        return [4, pet_service_1.default.update(req.body)];
                     case 1:
                         result = _a.sent();
                         res.status(201).send(result);
@@ -100,13 +100,13 @@ var UserController = (function () {
                 }
             });
         }); };
-        this.getUser = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+        this.getPet = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
             var result, e_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4, user_service_1.default.get(req.params.id)];
+                        return [4, pet_service_1.default.get(req.params.id)];
                     case 1:
                         result = _a.sent();
                         res.send(result);
@@ -119,13 +119,13 @@ var UserController = (function () {
                 }
             });
         }); };
-        this.getAllUser = function (_req, res) { return __awaiter(_this, void 0, void 0, function () {
+        this.getAllPet = function (_req, res) { return __awaiter(_this, void 0, void 0, function () {
             var result, e_5;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4, user_service_1.default.getAll()];
+                        return [4, pet_service_1.default.getAll()];
                     case 1:
                         result = _a.sent();
                         res.send(result);
@@ -133,74 +133,6 @@ var UserController = (function () {
                     case 2:
                         e_5 = _a.sent();
                         res.status(400).send({ error: e_5.message });
-                        return [3, 3];
-                    case 3: return [2];
-                }
-            });
-        }); };
-        this.login = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var result, e_6;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4, user_service_1.default.login(req.body)];
-                    case 1:
-                        result = _a.sent();
-                        res.status(201).send(result);
-                        return [3, 3];
-                    case 2:
-                        e_6 = _a.sent();
-                        res.status(400).send({ error: e_6.message });
-                        return [3, 3];
-                    case 3: return [2];
-                }
-            });
-        }); };
-        this.logout = function (_req, res) { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                try {
-                    res.send({ responce: "successfully logout" });
-                }
-                catch (e) {
-                    res.status(400).send({ error: e.message });
-                }
-                return [2];
-            });
-        }); };
-        this.addPetToUser = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var result, e_7;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4, user_service_1.default.addPet(req.body)];
-                    case 1:
-                        result = _a.sent();
-                        res.status(201).send(result);
-                        return [3, 3];
-                    case 2:
-                        e_7 = _a.sent();
-                        res.status(400).send({ error: e_7.message });
-                        return [3, 3];
-                    case 3: return [2];
-                }
-            });
-        }); };
-        this.getUserWithPets = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-            var result, e_8;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4, user_service_1.default.getPets(req.params.id)];
-                    case 1:
-                        result = _a.sent();
-                        res.status(201).send(result);
-                        return [3, 3];
-                    case 2:
-                        e_8 = _a.sent();
-                        res.status(400).send({ error: e_8.message });
                         return [3, 3];
                     case 3: return [2];
                 }

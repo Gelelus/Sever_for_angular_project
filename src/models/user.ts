@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import mongoose, { Schema, model } from 'mongoose';
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
@@ -21,7 +21,14 @@ const userSchema = new Schema({
         type: String,
         required: true,
         trim: true,
-    }
+    },
+    pets: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Pet'
+        }
+      ],
+
 })
 
 userSchema.statics.findByCredentials = async (login : string, password : string) : Promise<IUserDocument> => {
@@ -58,6 +65,6 @@ userSchema.pre('save', async function(next){
     next()
 })
 
-const User: IUserModel = model<IUserDocument, IUserModel>('User', userSchema);
+const User = model<IUserDocument, IUserModel>('User', userSchema);
 
 export default User

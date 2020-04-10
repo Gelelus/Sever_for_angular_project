@@ -4,11 +4,9 @@
 
 ## Description
 
-This repository is rewriting crudWithDb in typeScript.
-
 folder src - TS project.
 
-folder public - a client visual
+folder public - a client visual test_zone
 
 folder dist - js compilation of TS project.
 

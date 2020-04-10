@@ -32,6 +32,7 @@ var app = express_1.default();
 var port = process.env.PORT || 8080;
 app.use(express_1.default.json());
 app.use("/users", router.userRouter);
+app.use("/pets", router.petRouter);
 app.use(express_1.default.static(process.cwd() + "/public"));
 app.listen(port, function () {
     console.log("server on port " + port);

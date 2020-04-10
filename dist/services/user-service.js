@@ -40,6 +40,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var user_1 = __importDefault(require("../models/user"));
+var pet_1 = __importDefault(require("../models/pet"));
 var add = function (data) {
     return __awaiter(this, void 0, void 0, function () {
         var user;
@@ -111,6 +112,44 @@ var login = function (data) {
         });
     });
 };
+var getPets = function (id) {
+    return __awaiter(this, void 0, void 0, function () {
+        var userWithPets;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4, user_1.default.findById(id)
+                        .populate("pets")];
+                case 1:
+                    userWithPets = _a.sent();
+                    return [2, userWithPets];
+            }
+        });
+    });
+};
+var addPet = function (data) {
+    return __awaiter(this, void 0, void 0, function () {
+        var pet, user;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4, pet_1.default.findOne({ name: data.name })];
+                case 1:
+                    pet = _a.sent();
+                    if (!pet) {
+                        throw new Error("Pet doesn't exist");
+                    }
+                    return [4, user_1.default.findById(data.id)];
+                case 2:
+                    user = _a.sent();
+                    if (!user) {
+                        throw new Error("User doesn't exist");
+                    }
+                    user.pets.push(pet._id);
+                    user.save();
+                    return [2, { user: user, pet: pet }];
+            }
+        });
+    });
+};
 exports.default = {
     add: add,
     get: get,
@@ -118,4 +157,6 @@ exports.default = {
     del: del,
     getAll: getAll,
     login: login,
+    getPets: getPets,
+    addPet: addPet,
 };
