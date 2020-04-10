@@ -39,7 +39,7 @@ const login = async function (data: { password: string; name: string }) {
   return { user, token };
 };
 
-const getPets = async function (id: string) {
+const getPets = async function (id: string) {  // получение всех питомцов пользователя
   const userWithPets = await User.findById(id)
                                  .populate("pets")
                                  
