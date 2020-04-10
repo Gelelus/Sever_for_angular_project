@@ -62,7 +62,7 @@ class UserController {
     }
   };
 
-  addPetToUser: RequestHandler = async (req, res) => {    // Добавления питомца
+  addPetToUser: RequestHandler = async (req, res) => {    // привязка питомца к пользователю
     try {
       const result = await service.addPet(req.body); // name id
       res.status(201).send(result);
