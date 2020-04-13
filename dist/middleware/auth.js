@@ -60,6 +60,7 @@ var auth = function (req, res, next) { return __awaiter(void 0, void 0, void 0, 
                 if (!user) {
                     throw new Error;
                 }
+                req.user = user;
                 next();
                 return [3, 3];
             case 2:

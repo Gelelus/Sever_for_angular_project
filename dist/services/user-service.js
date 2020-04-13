@@ -117,8 +117,7 @@ var getPets = function (id) {
         var userWithPets;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4, user_1.default.findById(id)
-                        .populate("pets")];
+                case 0: return [4, user_1.default.findById(id).populate("pets")];
                 case 1:
                     userWithPets = _a.sent();
                     return [2, userWithPets];
@@ -150,6 +149,15 @@ var addPet = function (data) {
         });
     });
 };
+var addAvatar = function (file, user) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            user.avatarImg = file.path;
+            user.save();
+            return [2, file.path];
+        });
+    });
+};
 exports.default = {
     add: add,
     get: get,
@@ -159,4 +167,5 @@ exports.default = {
     login: login,
     getPets: getPets,
     addPet: addPet,
+    addAvatar: addAvatar,
 };

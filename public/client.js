@@ -151,7 +151,7 @@ const LogoutUser = async () => {
     let response = await fetch('/users/logout', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json;',
+            'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem('token')
         }
     });
@@ -163,6 +163,21 @@ const LogoutUser = async () => {
     localStorage.removeItem('name')
     document.forms["authForm"].hidden = false
     document.getElementById('logoutDiv').hidden = true
+}
+//загрузка аватара
+const AddAvatar = async (avatar) => {
+
+    let response = await fetch('/users/upload/avatar', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+        body: avatar
+    });
+
+    let user = await response.json();
+    console.log(user)
 }
 
 // создание строки для таблицы
@@ -200,6 +215,14 @@ document.querySelectorAll("form")[1].onsubmit = function (e) {
         CreateUser(name, age, password);
     else
         EditUser(id, name, age);
+};
+
+// отправка аватарки
+document.querySelectorAll("form")[2].onsubmit = function (e) {
+    e.preventDefault();
+    const formData = new FormData(document.querySelectorAll("form")[2])
+    
+    AddAvatar(formData); 
 };
 
 // нажимаем на ссылку Изменить

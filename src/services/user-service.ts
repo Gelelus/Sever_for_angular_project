@@ -1,3 +1,6 @@
+import { File } from "../interfaces/MulterFileFilter";
+import { IUserDocument } from '../interfaces/IUserDocument';
+
 import User from "../models/user";
 import Pet from "../models/pet";
 
@@ -39,27 +42,34 @@ const login = async function (data: { password: string; name: string }) {
   return { user, token };
 };
 
-const getPets = async function (id: string) {  // получение всех питомцов пользователя
-  const userWithPets = await User.findById(id)
-                                 .populate("pets")
-                                 
+const getPets = async function (id: string) {
+  // получение всех питомцов пользователя
+  const userWithPets = await User.findById(id).populate("pets");
+
   return userWithPets;
 };
 
-const addPet = async function (data: { id: string; name: string }) { //привязка питомца к пользователю
-  
-  const pet = await Pet.findOne({name: data.name}); //проверка есть ли питомец в базе
+const addPet = async function (data: { id: string; name: string }) {
+  //привязка питомца к пользователю
+
+  const pet = await Pet.findOne({ name: data.name }); //проверка есть ли питомец в базе
   if (!pet) {
     throw new Error("Pet doesn't exist");
   }
-  const user = await User.findById(data.id); 
+  const user = await User.findById(data.id);
   if (!user) {
     throw new Error("User doesn't exist");
   }
   user.pets.push(pet._id); //привязка питомца к пользователю
   user.save();
- 
+
   return { user, pet };
+};
+
+const addAvatar = async function (file: File, user: IUserDocument) {
+    user.avatarImg = file.path;
+    user.save();
+    return file.path
 };
 
 export default {
@@ -71,4 +81,5 @@ export default {
   login,
   getPets,
   addPet,
+  addAvatar,
 };

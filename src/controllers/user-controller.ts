@@ -79,6 +79,16 @@ class UserController {
       res.status(400).send({ error: e.message });
     }
   };
+
+  addAvatarToUser: RequestHandler = async (req, res) => {    //добавление аватара 
+    try {
+      const result = await service.addAvatar(req.file, req.user);
+      res.status(201).send(result);
+    } catch (e) {
+      res.status(400).send({ error: e.message });
+    }
+  };
+
 }
 
 export default UserController;

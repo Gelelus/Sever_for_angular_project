@@ -66,6 +66,10 @@ var userSchema = new mongoose_1.Schema({
         required: true,
         trim: true,
     },
+    avatarImg: {
+        type: String,
+        required: true,
+    },
     pets: [
         {
             type: mongoose_1.default.Schema.Types.ObjectId,

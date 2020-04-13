@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var validation = function (schema) { return function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+exports.default = (function (schema) { return function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -54,5 +54,4 @@ var validation = function (schema) { return function (req, res, next) { return _
             case 3: return [2];
         }
     });
-}); }; };
-exports.default = validation;
+}); }; });

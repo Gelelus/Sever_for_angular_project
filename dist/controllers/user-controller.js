@@ -206,6 +206,25 @@ var UserController = (function () {
                 }
             });
         }); };
+        this.addAvatarToUser = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+            var result, e_9;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4, user_service_1.default.addAvatar(req.file, req.user)];
+                    case 1:
+                        result = _a.sent();
+                        res.status(201).send(result);
+                        return [3, 3];
+                    case 2:
+                        e_9 = _a.sent();
+                        res.status(400).send({ error: e_9.message });
+                        return [3, 3];
+                    case 3: return [2];
+                }
+            });
+        }); };
     }
     return UserController;
 }());

@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import Joi from '@hapi/joi';
 
-const validation = (schema : Joi.ObjectSchema) : RequestHandler => async (req, res, next) => {
+export default (schema : Joi.ObjectSchema) : RequestHandler => async (req, res, next) => {
     try {
        await schema.validateAsync(req.body);
         next();
@@ -11,5 +11,5 @@ const validation = (schema : Joi.ObjectSchema) : RequestHandler => async (req, r
     }
 };
 
-export default validation 
+
 

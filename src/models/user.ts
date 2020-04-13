@@ -22,6 +22,10 @@ const userSchema = new Schema({
         required: true,
         trim: true,
     },
+    avatarImg: {
+        type: String,
+        required: true,
+    },
     pets: [
         {
           type: mongoose.Schema.Types.ObjectId,
