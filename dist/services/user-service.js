@@ -154,7 +154,7 @@ var addAvatar = function (file, user) {
         return __generator(this, function (_a) {
             user.avatarImg = file.path;
             user.save();
-            return [2, file.path];
+            return [2, user];
         });
     });
 };

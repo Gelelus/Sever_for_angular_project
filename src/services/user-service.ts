@@ -69,7 +69,7 @@ const addPet = async function (data: { id: string; name: string }) {
 const addAvatar = async function (file: File, user: IUserDocument) {
     user.avatarImg = file.path;
     user.save();
-    return file.path
+    return user
 };
 
 export default {
