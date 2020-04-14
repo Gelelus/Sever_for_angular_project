@@ -166,7 +166,7 @@ const LogoutUser = async () => {
 }
 //загрузка аватара
 const AddAvatar = async (avatar) => {
-
+    
     let response = await fetch('/users/upload/avatar', {
         method: 'POST',
         credentials: 'same-origin',

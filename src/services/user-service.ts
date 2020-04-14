@@ -67,7 +67,7 @@ const addPet = async function (data: { id: string; name: string }) {
 };
 
 const addAvatar = async function (file: File, user: IUserDocument) {
-    user.avatarImg = file.path;
+    user.avatarImg = "/public/img/avatars/" + file.filename;
     user.save();
     return user
 };
