@@ -12,49 +12,58 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const pet_service_1 = __importDefault(require("../services/pet-service"));
+const recipe_service_1 = __importDefault(require("../services/recipe-service"));
 class UserController {
     constructor() { }
 }
-UserController.addPet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+UserController.addRecipe = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield pet_service_1.default.add(req.body);
+        const result = yield recipe_service_1.default.add(req.body);
         res.status(201).send(result);
     }
     catch (e) {
         res.status(400).send({ error: e.message });
     }
 });
-UserController.deletePet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+UserController.deleteRecipe = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield pet_service_1.default.del(req.params.id);
+        const result = yield recipe_service_1.default.del(req.params.id);
         res.status(201).send(result);
     }
     catch (e) {
         res.status(400).send({ error: e.message });
     }
 });
-UserController.updatePet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+UserController.updateRecipe = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield pet_service_1.default.update(req.body);
+        const result = yield recipe_service_1.default.update(req.body);
         res.status(201).send(result);
     }
     catch (e) {
         res.status(400).send({ error: e.message });
     }
 });
-UserController.getPet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+UserController.updateRecipes = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield pet_service_1.default.get(req.params.id);
+        const result = yield recipe_service_1.default.updateAll(req.body);
+        res.status(201).send(result);
+    }
+    catch (e) {
+        res.status(400).send({ error: e.message });
+    }
+});
+UserController.getRecipe = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield recipe_service_1.default.get(req.params.id);
         res.send(result);
     }
     catch (e) {
         res.status(400).send({ error: e.message });
     }
 });
-UserController.getAllPet = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+UserController.getAllRecipe = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield pet_service_1.default.getAll();
+        const result = yield recipe_service_1.default.getAll();
         res.send(result);
     }
     catch (e) {

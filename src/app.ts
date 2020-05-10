@@ -1,7 +1,9 @@
 import express from "express";
-import * as router from "./routers/export-router";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+
+import options from "./middleware/options";
+import * as router from "./routers/export-router";
 
 dotenv.config(); //env reader
 
@@ -29,8 +31,9 @@ const app = express();
 const port = process.env.PORT || 8080;
 
 app.use(express.json());
+app.use(options)
 app.use("/users", router.userRouter);
-app.use("/pets", router.petRouter);
+app.use("/recipes", router.recipeRouter);
 app.use(express.static(process.cwd() + "/public"));
 
 app.listen(port, () => {

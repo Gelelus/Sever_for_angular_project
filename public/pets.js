@@ -18,7 +18,7 @@ const getPets = async () => {
 
     let response = await fetch('/users/pet/'+ localStorage.getItem('id'), {
         headers: {
-            'Content-Type': 'application/json;',
+            'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem('token')
         }
     })
@@ -26,17 +26,14 @@ const getPets = async () => {
     console.log(result)    
 }
  //привязка питомца
-const addPetToUser = async (petName) => {
-    let data = {
-        name: petName,
-        id: localStorage.getItem('id')
-    }
-    let response = await fetch('/users/pet', {
+const addRecipesToUser = async (data,token) => {
+   
+    let response = await fetch('/users/recipes', {
         method: 'POST',
         credentials: 'same-origin',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('token'),
+            'Authorization': 'Bearer ' + token,
         },
         body: JSON.stringify(data)
     })

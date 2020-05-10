@@ -3,7 +3,7 @@ import { RequestHandler } from "express";
 
 class UserController {
   constructor() {}
-  addUser: RequestHandler = async (req, res) => {
+  static addUser: RequestHandler = async (req, res) => {
     try {
       const result = await service.add(req.body);
       res.status(201).send(result);
@@ -11,7 +11,8 @@ class UserController {
       res.status(400).send({ error: e.message });
     }
   };
-  deleteUser: RequestHandler = async (req, res) => {
+
+  static deleteUser: RequestHandler = async (req, res) => {
     try {
       const result = await service.del(req.params.id);
       res.status(201).send(result);
@@ -19,7 +20,8 @@ class UserController {
       res.status(400).send({ error: e.message });
     }
   };
-  updateUser: RequestHandler = async (req, res) => {
+
+  static updateUser: RequestHandler = async (req, res) => {
     try {
       const result = await service.update(req.body);
       res.status(201).send(result);
@@ -28,7 +30,7 @@ class UserController {
     }
   };
 
-  getUser: RequestHandler = async (req, res) => {
+  static getUser: RequestHandler = async (req, res) => {
     try {
       const result = await service.get(req.params.id);
       res.send(result);
@@ -36,7 +38,8 @@ class UserController {
       res.status(400).send({ error: e.message });
     }
   };
-  getAllUser: RequestHandler = async (_req, res) => {
+  
+  static getAllUser: RequestHandler = async (_req, res) => {
     try {
       const result = await service.getAll();
       res.send(result);
@@ -45,7 +48,7 @@ class UserController {
     }
   };
 
-  login: RequestHandler = async (req, res) => {
+  static login: RequestHandler = async (req, res) => {
     try {
       const result = await service.login(req.body);
       res.status(201).send(result);
@@ -54,33 +57,44 @@ class UserController {
     }
   };
 
-  logout: RequestHandler = async (_req, res) => {
+  static bindRecipeToUser: RequestHandler = async (req, res) => {    // привязка питомца к пользователю
     try {
-      res.send({ responce: "successfully logout" });
-    } catch (e) {
-      res.status(400).send({ error: e.message });
-    }
-  };
-
-  addPetToUser: RequestHandler = async (req, res) => {    // привязка питомца к пользователю
-    try {
-      const result = await service.addPet(req.body); // name id
+      const result = await service.bindRecipe(req.user, req.body); // name id
       res.status(201).send(result);
     } catch (e) {
       res.status(400).send({ error: e.message });
     }
   };
 
-  getUserWithPets: RequestHandler = async (req, res) => {    //получение всех питомцов пользователя
+  static addRecipeToUser: RequestHandler = async (req, res) => {    // привязка питомца к пользователю
     try {
-      const result = await service.getPets(req.params.id);
+      const result = await service.addRecipe(req.user, req.body); 
       res.status(201).send(result);
     } catch (e) {
       res.status(400).send({ error: e.message });
     }
   };
 
-  addAvatarToUser: RequestHandler = async (req, res) => {    //добавление аватара 
+  static addRecipesToUser: RequestHandler = async (req, res) => {    // привязка питомца к пользователю
+    try {
+      const result = await service.addRecipes(req.user, req.body); 
+      res.status(201).send(result);
+    } catch (e) {
+      res.status(400).send({ error: e.message });
+    }
+  };
+
+
+  static getUserWithRecipes: RequestHandler = async (req, res) => {    //получение всех питомцов пользователя
+    try {
+      const result = await service.getRecipes(req.params.id);
+      res.status(201).send(result);
+    } catch (e) {
+      res.status(400).send({ error: e.message });
+    }
+  };
+
+  static addAvatarToUser: RequestHandler = async (req, res) => {    //добавление аватара 
     try {
       const result = await service.addAvatar(req.file, req.user);
       res.status(201).send(result);

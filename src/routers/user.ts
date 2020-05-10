@@ -8,23 +8,27 @@ import auth from "../middleware/auth";
 import avatarUpload from "../middleware/uploadAvatar"
 
 import UserController from "../controllers/user-controller";
-const user_controller = new UserController();
+
 
 const router = Router();
 
-router.post("/", validation(validCreateUser),  user_controller.addUser); //регистрация
+router.post("/", validation(validCreateUser),  UserController.addUser); //регистрация
 
-router.post("/upload/avatar", auth, avatarUpload, user_controller.addAvatarToUser); // загрузка аватара для пользователя
+router.post("/upload/avatar", auth, avatarUpload, UserController.addAvatarToUser); // загрузка аватара для пользователя
 
-router.delete("/:id", auth, user_controller.deleteUser); // удаление пользователя
-router.put("/", auth, user_controller.updateUser); // изменение пользователя
-router.get("/:id", auth, user_controller.getUser); // получение одного пользователя
-router.get("/", auth, user_controller.getAllUser); // получение всех пользователей
+router.delete("/:id", auth, UserController.deleteUser); // удаление пользователя
+router.put("/", auth, UserController.updateUser); // изменение пользователя
+router.get("/:id", auth, UserController.getUser); // получение одного пользователя
+router.get("/", auth, UserController.getAllUser); // получение всех пользователей
 
-router.post("/pet", auth, user_controller.addPetToUser); // привязка питомца к пользователю
-router.get("/pet/:id", auth, user_controller.getUserWithPets); // получение всех питомцов пользователя
+router.post("/recipe/bind", auth, UserController.bindRecipeToUser); // привязка сторонего рецепта
 
-router.post("/login",validation(validLoginUser) , user_controller.login); //авторизация
-router.post("/logout", auth, user_controller.logout); //выход // посути не нужен т.к. используется jwt
+router.post("/recipe", auth, UserController.addRecipeToUser); // добавление рецепта юсера
+router.post("/recipes", auth, UserController.addRecipesToUser); // добавление рецептов юсеру
+
+router.get("/recipe/:id", auth, UserController.getUserWithRecipes); // получение всех питомцов пользователя
+
+router.post("/login",validation(validLoginUser) , UserController.login); //авторизация
+
 
 export default router;

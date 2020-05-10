@@ -14,96 +14,105 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_service_1 = __importDefault(require("../services/user-service"));
 class UserController {
-    constructor() {
-        this.addUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                const result = yield user_service_1.default.add(req.body);
-                res.status(201).send(result);
-            }
-            catch (e) {
-                res.status(400).send({ error: e.message });
-            }
-        });
-        this.deleteUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                const result = yield user_service_1.default.del(req.params.id);
-                res.status(201).send(result);
-            }
-            catch (e) {
-                res.status(400).send({ error: e.message });
-            }
-        });
-        this.updateUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                const result = yield user_service_1.default.update(req.body);
-                res.status(201).send(result);
-            }
-            catch (e) {
-                res.status(400).send({ error: e.message });
-            }
-        });
-        this.getUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                const result = yield user_service_1.default.get(req.params.id);
-                res.send(result);
-            }
-            catch (e) {
-                res.status(400).send({ error: e.message });
-            }
-        });
-        this.getAllUser = (_req, res) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                const result = yield user_service_1.default.getAll();
-                res.send(result);
-            }
-            catch (e) {
-                res.status(400).send({ error: e.message });
-            }
-        });
-        this.login = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                const result = yield user_service_1.default.login(req.body);
-                res.status(201).send(result);
-            }
-            catch (e) {
-                res.status(400).send({ error: e.message });
-            }
-        });
-        this.logout = (_req, res) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                res.send({ responce: "successfully logout" });
-            }
-            catch (e) {
-                res.status(400).send({ error: e.message });
-            }
-        });
-        this.addPetToUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                const result = yield user_service_1.default.addPet(req.body);
-                res.status(201).send(result);
-            }
-            catch (e) {
-                res.status(400).send({ error: e.message });
-            }
-        });
-        this.getUserWithPets = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                const result = yield user_service_1.default.getPets(req.params.id);
-                res.status(201).send(result);
-            }
-            catch (e) {
-                res.status(400).send({ error: e.message });
-            }
-        });
-        this.addAvatarToUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                const result = yield user_service_1.default.addAvatar(req.file, req.user);
-                res.status(201).send(result);
-            }
-            catch (e) {
-                res.status(400).send({ error: e.message });
-            }
-        });
-    }
+    constructor() { }
 }
+UserController.addUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield user_service_1.default.add(req.body);
+        res.status(201).send(result);
+    }
+    catch (e) {
+        res.status(400).send({ error: e.message });
+    }
+});
+UserController.deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield user_service_1.default.del(req.params.id);
+        res.status(201).send(result);
+    }
+    catch (e) {
+        res.status(400).send({ error: e.message });
+    }
+});
+UserController.updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield user_service_1.default.update(req.body);
+        res.status(201).send(result);
+    }
+    catch (e) {
+        res.status(400).send({ error: e.message });
+    }
+});
+UserController.getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield user_service_1.default.get(req.params.id);
+        res.send(result);
+    }
+    catch (e) {
+        res.status(400).send({ error: e.message });
+    }
+});
+UserController.getAllUser = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield user_service_1.default.getAll();
+        res.send(result);
+    }
+    catch (e) {
+        res.status(400).send({ error: e.message });
+    }
+});
+UserController.login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield user_service_1.default.login(req.body);
+        res.status(201).send(result);
+    }
+    catch (e) {
+        res.status(400).send({ error: e.message });
+    }
+});
+UserController.bindRecipeToUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield user_service_1.default.bindRecipe(req.user, req.body);
+        res.status(201).send(result);
+    }
+    catch (e) {
+        res.status(400).send({ error: e.message });
+    }
+});
+UserController.addRecipeToUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield user_service_1.default.addRecipe(req.user, req.body);
+        res.status(201).send(result);
+    }
+    catch (e) {
+        res.status(400).send({ error: e.message });
+    }
+});
+UserController.addRecipesToUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield user_service_1.default.addRecipes(req.user, req.body);
+        res.status(201).send(result);
+    }
+    catch (e) {
+        res.status(400).send({ error: e.message });
+    }
+});
+UserController.getUserWithRecipes = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield user_service_1.default.getRecipes(req.params.id);
+        res.status(201).send(result);
+    }
+    catch (e) {
+        res.status(400).send({ error: e.message });
+    }
+});
+UserController.addAvatarToUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield user_service_1.default.addAvatar(req.file, req.user);
+        res.status(201).send(result);
+    }
+    catch (e) {
+        res.status(400).send({ error: e.message });
+    }
+});
 exports.default = UserController;

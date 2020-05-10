@@ -13,12 +13,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_1 = __importDefault(require("../models/user"));
-const pet_1 = __importDefault(require("../models/pet"));
+const recipe_1 = __importDefault(require("../models/recipe"));
 const add = function (data) {
     return __awaiter(this, void 0, void 0, function* () {
         const user = new user_1.default(data);
+        const token = yield user.generateAuthToken();
         yield user.save();
-        return user;
+        return {
+            idToken: token,
+            localId: user._id,
+            email: user.email,
+            expiresIn: 3600,
+        };
     });
 };
 const get = function (id) {
@@ -43,36 +49,52 @@ const del = function (id) {
 };
 const login = function (data) {
     return __awaiter(this, void 0, void 0, function* () {
-        const user = yield user_1.default.findByCredentials(data.name, data.password);
+        const user = yield user_1.default.findByCredentials(data.email, data.password);
         const token = yield user.generateAuthToken();
-        return { user, token };
+        return {
+            idToken: token,
+            localId: user._id,
+            email: user.email,
+            expiresIn: 3600,
+        };
     });
 };
-const getPets = function (id) {
+const getRecipes = function (id) {
     return __awaiter(this, void 0, void 0, function* () {
-        const userWithPets = yield user_1.default.findById(id).populate("pets");
-        return userWithPets;
+        const userWithRecipes = yield user_1.default.findById(id).populate("recipes");
+        return userWithRecipes;
     });
 };
-const addPet = function (data) {
+const addRecipe = function (user, data) {
     return __awaiter(this, void 0, void 0, function* () {
-        const pet = yield pet_1.default.findOne({ name: data.name });
-        if (!pet) {
-            throw new Error("Pet doesn't exist");
+        const recipe = yield new recipe_1.default(data);
+        yield recipe.save();
+        user.recipes.push(recipe._id);
+        yield user.save();
+        return { user, recipe };
+    });
+};
+const addRecipes = function (_user, data) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const answer = yield recipe_1.default.insertMany(data, { ordered: false });
+        return { answer };
+    });
+};
+const bindRecipe = function (user, data) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const recipe = yield recipe_1.default.findOne({ name: data.name });
+        if (!recipe) {
+            throw new Error("Recipe doesn't exist");
         }
-        const user = yield user_1.default.findById(data.id);
-        if (!user) {
-            throw new Error("User doesn't exist");
-        }
-        user.pets.push(pet._id);
-        user.save();
-        return { user, pet };
+        user.recipes.push(recipe._id);
+        yield user.save();
+        return { user, recipe };
     });
 };
 const addAvatar = function (file, user) {
     return __awaiter(this, void 0, void 0, function* () {
         user.avatarImg = "/public/img/avatars/" + file.filename;
-        user.save();
+        yield user.save();
         return user;
     });
 };
@@ -83,7 +105,9 @@ exports.default = {
     del,
     getAll,
     login,
-    getPets,
-    addPet,
+    getRecipes,
+    bindRecipe,
     addAvatar,
+    addRecipe,
+    addRecipes,
 };

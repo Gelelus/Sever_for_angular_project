@@ -1,10 +1,10 @@
-import service from "../services/pet-service";
+import service from "../services/recipe-service";
 import { RequestHandler } from "express";
 
 class UserController {
   constructor() {}
   
-  addPet: RequestHandler = async (req, res) => {
+  static addRecipe: RequestHandler = async (req, res) => {
     try {
       const result = await service.add(req.body);
       res.status(201).send(result);
@@ -13,7 +13,7 @@ class UserController {
     }
   };
 
-  deletePet: RequestHandler = async (req, res) => {
+  static deleteRecipe: RequestHandler = async (req, res) => {
     try {
       const result = await service.del(req.params.id);
       res.status(201).send(result);
@@ -22,7 +22,7 @@ class UserController {
     }
   };
 
-  updatePet: RequestHandler = async (req, res) => {
+  static  updateRecipe: RequestHandler = async (req, res) => {
     try {
       const result = await service.update(req.body);
       res.status(201).send(result);
@@ -31,7 +31,16 @@ class UserController {
     }
   };
 
-  getPet: RequestHandler = async (req, res) => {
+  static  updateRecipes: RequestHandler = async (req, res) => {
+    try {
+      const result = await service.updateAll(req.body);
+      res.status(201).send(result);
+    } catch (e) {
+      res.status(400).send({ error: e.message });
+    }
+  };
+
+  static getRecipe: RequestHandler = async (req, res) => {
     try {
       const result = await service.get(req.params.id);
       res.send(result);
@@ -40,7 +49,7 @@ class UserController {
     }
   };
 
-  getAllPet: RequestHandler = async (_req, res) => {
+  static getAllRecipe: RequestHandler = async (_req, res) => {
     try {
       const result = await service.getAll();
       res.send(result);
@@ -48,6 +57,8 @@ class UserController {
       res.status(400).send({ error: e.message });
     }
   };
+
+  
 
 }
 
