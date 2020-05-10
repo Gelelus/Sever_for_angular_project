@@ -12,7 +12,7 @@ const auth : RequestHandler = async (req, res, next) => {
         if(!header){throw new Error}
         
         const token = header.replace('Bearer ', '');
-        console.log(token)
+        
      
 
         const decoded  = jwt.verify(token, 'expressapp') as DataStoredInToken; 

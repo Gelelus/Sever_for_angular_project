@@ -43,10 +43,9 @@ const GetUser = async (id) => {
 }
 
 // Добавление пользователя
-const CreateUser = async (userName, userAge, userPassword) => {
+const CreateUser = async (email, userPassword) => {
     let data = {
-        name: userName,
-        age: userAge,
+        email: email,
         password: userPassword
     }
     console.log(data);
@@ -58,10 +57,7 @@ const CreateUser = async (userName, userAge, userPassword) => {
     });
     let user = await response.json();
     console.log(user)
-    reset();
-    if(response.status<400){
-    document.querySelector("table tbody").insertAdjacentHTML('beforeend', row(user));
-    }
+    
 }
 
 

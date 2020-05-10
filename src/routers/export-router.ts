@@ -1,7 +1,7 @@
 import userRouter from '../routers/user';
-import petRouter from '../routers/pet';
+import recipeRouter from '../routers/recipe';
 
 export {
     userRouter,
-    petRouter
+    recipeRouter
 };

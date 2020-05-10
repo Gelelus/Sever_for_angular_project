@@ -23,59 +23,65 @@ const mongoose_1 = __importStar(require("mongoose"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const userSchema = new mongoose_1.Schema({
-    name: {
-        type: String,
-        unique: true,
-        required: true,
-        trim: true
-    },
-    age: {
-        type: String,
-        required: true,
-        trim: true,
-    },
     password: {
         type: String,
         required: true,
         trim: true,
     },
-    avatarImg: {
+    email: {
         type: String,
         required: true,
+        unique: true,
+        trim: true,
     },
-    pets: [
+    age: {
+        type: String,
+        trim: true,
+    },
+    avatarImg: {
+        type: String,
+        trim: true,
+    },
+    name: {
+        type: String,
+        trim: true,
+    },
+    recipes: [
         {
             type: mongoose_1.default.Schema.Types.ObjectId,
-            ref: 'Pet'
-        }
+            ref: "Recipe",
+        },
     ],
 });
-userSchema.statics.findByCredentials = (login, password) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield User.findOne({ name: login });
+userSchema.statics.findByCredentials = (email, password) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield User.findOne({ email: email });
     if (!user) {
-        throw new Error('Unable user');
+        throw new Error("Unable user");
     }
     const isMatch = yield bcryptjs_1.default.compare(password, user.password);
     if (!isMatch) {
-        throw new Error('Unable to login');
+        throw new Error("Unable to login");
     }
     return user;
 });
 userSchema.methods.generateAuthToken = function () {
     return __awaiter(this, void 0, void 0, function* () {
         const user = this;
-        const token = jsonwebtoken_1.default.sign({ _id: user._id.toString() }, 'expressapp');
+        const token = jsonwebtoken_1.default.sign({
+            _id: user._id.toString(),
+            expiresIn: Date.now() + 3600000,
+        }, "expressapp");
         return token;
     });
 };
-userSchema.pre('save', function (next) {
+userSchema.pre("save", function (next) {
     return __awaiter(this, void 0, void 0, function* () {
         const user = this;
-        if (user.isModified('password')) {
+        if (user.isModified("password")) {
             user.password = yield bcryptjs_1.default.hash(user.password, 8);
         }
         next();
     });
 });
-const User = mongoose_1.model('User', userSchema);
+const User = mongoose_1.model("User", userSchema);
 exports.default = User;

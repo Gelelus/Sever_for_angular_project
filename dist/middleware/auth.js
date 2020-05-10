@@ -21,7 +21,6 @@ const auth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () 
             throw new Error;
         }
         const token = header.replace('Bearer ', '');
-        console.log(token);
         const decoded = jsonwebtoken_1.default.verify(token, 'expressapp');
         const user = yield user_1.default.findOne({ _id: decoded._id });
         if (!user) {
