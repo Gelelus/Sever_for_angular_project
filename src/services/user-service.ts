@@ -6,16 +6,23 @@ import Recipe from "../models/recipe";
 import { recipeData } from "../interfaces/recipeData";
 
 const add = async function (data: { password: string; email: string }) {
-  const user = new User(data);
-  const token = await user.generateAuthToken();
-  await user.save();
+  const userTest = await User.findOne({ email: data.email });//
+  if (userTest) {
+    throw new Error("Email already exists");
+  } 
+    const user = new User(data);
 
-  return {
-    idToken: token,
-    localId: user._id,
-    email: user.email,
-    expiresIn: 3600,
-  };
+    const token = await user.generateAuthToken();
+    await user.save();
+
+    return {
+      idToken: token,
+      localId: user._id,
+      email: user.email,
+      expiresIn: 3600,
+      avatarUrl: user.avatarImg
+    };
+  
 };
 
 const get = async function (id: string) {
@@ -42,12 +49,13 @@ const login = async function (data: { password: string; email: string }) {
   const user = await User.findByCredentials(data.email, data.password); //статик метод из model проверка хэша и логина
 
   const token = await user.generateAuthToken(); // генерация токена
-
+  
   return {
     idToken: token,
     localId: user._id,
     email: user.email,
     expiresIn: 3600,
+    avatarUrl: user.avatarImg
   };
 };
 
@@ -58,10 +66,7 @@ const getRecipes = async function (id: string) {
   return userWithRecipes;
 };
 
-const addRecipe = async function (
-  user: IUserDocument,
-  data: recipeData
-) {
+const addRecipe = async function (user: IUserDocument, data: recipeData) {
   const recipe = await new Recipe(data);
   await recipe.save();
   user.recipes.push(recipe._id);
@@ -70,13 +75,9 @@ const addRecipe = async function (
   return { user, recipe };
 };
 
-const addRecipes = async function (
-  _user: IUserDocument,
-  data: recipeData[]
-) {
-  
-  const answer = await Recipe.insertMany(data,{ordered: false})
-  
+const addRecipes = async function (_user: IUserDocument, data: recipeData[]) {
+  const answer = await Recipe.insertMany(data, { ordered: false });
+
   //user.recipes.push(recipe._id);
   //await user.save();
 

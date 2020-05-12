@@ -25,6 +25,7 @@ const userSchema = new Schema({
   avatarImg: {
     type: String,
     trim: true,
+    default: 'img/avatars/avatar.png'
   },
   name: {
     type: String,
