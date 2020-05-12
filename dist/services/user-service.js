@@ -16,6 +16,10 @@ const user_1 = __importDefault(require("../models/user"));
 const recipe_1 = __importDefault(require("../models/recipe"));
 const add = function (data) {
     return __awaiter(this, void 0, void 0, function* () {
+        const userTest = yield user_1.default.findOne({ email: data.email });
+        if (userTest) {
+            throw new Error("Email already exists");
+        }
         const user = new user_1.default(data);
         const token = yield user.generateAuthToken();
         yield user.save();
@@ -24,6 +28,7 @@ const add = function (data) {
             localId: user._id,
             email: user.email,
             expiresIn: 3600,
+            avatarUrl: user.avatarImg
         };
     });
 };
@@ -56,6 +61,7 @@ const login = function (data) {
             localId: user._id,
             email: user.email,
             expiresIn: 3600,
+            avatarUrl: user.avatarImg
         };
     });
 };
