@@ -16,21 +16,24 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = __importDefault(require("../models/user"));
 const auth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const header = req.header('Authorization');
+        const header = req.header("Authorization");
         if (!header) {
-            throw new Error;
+            throw new Error();
         }
-        const token = header.replace('Bearer ', '');
-        const decoded = jsonwebtoken_1.default.verify(token, 'expressapp');
+        const token = header.replace("Bearer ", "");
+        const decoded = jsonwebtoken_1.default.verify(token, "expressapp");
         const user = yield user_1.default.findOne({ _id: decoded._id });
         if (!user) {
-            throw new Error;
+            throw new Error();
+        }
+        else if (Date.now() > decoded.expiresIn) {
+            throw new Error();
         }
         req.user = user;
         next();
     }
     catch (e) {
-        res.status(401).send({ error: 'Please autentificate' });
+        res.status(401).send({ error: "Please autentificate" });
     }
 });
 exports.default = auth;
