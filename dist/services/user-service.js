@@ -77,7 +77,7 @@ const addRecipe = function (user, data) {
         yield recipe.save();
         user.recipes.push(recipe._id);
         yield user.save();
-        return { user, recipe };
+        return recipe;
     });
 };
 const addRecipes = function (_user, data) {

@@ -4,7 +4,6 @@ import { IRecipeDocument } from "../interfaces/IRecipeDocument";
 const recipeSchema = new Schema({
   name: {
     type: String,
-    unique: true,
     required: true,
     trim: true,
   },

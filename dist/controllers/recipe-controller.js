@@ -18,7 +18,7 @@ class UserController {
 }
 UserController.addRecipe = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield recipe_service_1.default.add(req.body);
+        const result = yield recipe_service_1.default.add(req.body, req.user);
         res.status(201).send(result);
     }
     catch (e) {
@@ -27,7 +27,7 @@ UserController.addRecipe = (req, res) => __awaiter(void 0, void 0, void 0, funct
 });
 UserController.deleteRecipe = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield recipe_service_1.default.del(req.params.id);
+        const result = yield recipe_service_1.default.del(req.params.id, req.user);
         res.status(201).send(result);
     }
     catch (e) {
@@ -36,7 +36,7 @@ UserController.deleteRecipe = (req, res) => __awaiter(void 0, void 0, void 0, fu
 });
 UserController.updateRecipe = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield recipe_service_1.default.update(req.body);
+        const result = yield recipe_service_1.default.update(req.body, req.user);
         res.status(201).send(result);
     }
     catch (e) {

@@ -22,11 +22,11 @@ router.get("/:id", auth, UserController.getUser); // получение одно
 router.get("/", auth, UserController.getAllUser); // получение всех пользователей
 
 router.post("/recipe/bind", auth, UserController.bindRecipeToUser); // привязка сторонего рецепта
-
 router.post("/recipe", auth, UserController.addRecipeToUser); // добавление рецепта юсера
-router.post("/recipes", auth, UserController.addRecipesToUser); // добавление рецептов юсеру
 
-router.get("/recipe/:id", auth, UserController.getUserWithRecipes); // получение всех питомцов пользователя
+
+router.post("/recipes", auth, UserController.addRecipesToUser); // добавление рецептов юсеру
+router.get("/recipe/:id", auth, UserController.getUserWithRecipes); // 
 
 router.post("/login",validation(validLoginUser) , UserController.login); //авторизация
 

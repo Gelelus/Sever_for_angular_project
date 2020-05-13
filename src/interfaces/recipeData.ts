@@ -3,5 +3,5 @@ export interface recipeData{
     description: string;
     imagePath: string;
     ingredients: { name: string; amount: number }[];
-    id?: string
+    _id: string
   }

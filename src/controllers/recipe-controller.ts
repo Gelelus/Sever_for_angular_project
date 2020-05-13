@@ -3,10 +3,10 @@ import { RequestHandler } from "express";
 
 class UserController {
   constructor() {}
-  
+
   static addRecipe: RequestHandler = async (req, res) => {
     try {
-      const result = await service.add(req.body);
+      const result = await service.add(req.body, req.user);
       res.status(201).send(result);
     } catch (e) {
       res.status(400).send({ error: e.message });
@@ -15,23 +15,23 @@ class UserController {
 
   static deleteRecipe: RequestHandler = async (req, res) => {
     try {
-      const result = await service.del(req.params.id);
+      const result = await service.del(req.params.id, req.user);
       res.status(201).send(result);
     } catch (e) {
       res.status(400).send({ error: e.message });
     }
   };
 
-  static  updateRecipe: RequestHandler = async (req, res) => {
+  static updateRecipe: RequestHandler = async (req, res) => {
     try {
-      const result = await service.update(req.body);
+      const result = await service.update(req.body, req.user);
       res.status(201).send(result);
     } catch (e) {
       res.status(400).send({ error: e.message });
     }
   };
 
-  static  updateRecipes: RequestHandler = async (req, res) => {
+  static updateRecipes: RequestHandler = async (req, res) => {
     try {
       const result = await service.updateAll(req.body);
       res.status(201).send(result);
@@ -57,9 +57,6 @@ class UserController {
       res.status(400).send({ error: e.message });
     }
   };
-
-  
-
 }
 
 export default UserController;

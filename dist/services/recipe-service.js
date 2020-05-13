@@ -13,11 +13,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const recipe_1 = __importDefault(require("../models/recipe"));
-const add = function (data) {
+const add = function (data, user) {
     return __awaiter(this, void 0, void 0, function* () {
-        const pet = new recipe_1.default(data);
-        yield pet.save();
-        return pet;
+        const recipe = yield new recipe_1.default(data);
+        yield recipe.save();
+        user.recipes.push(recipe._id);
+        yield user.save();
+        return recipe;
     });
 };
 const get = function (id) {
@@ -30,9 +32,12 @@ const getAll = function () {
         return yield recipe_1.default.find({});
     });
 };
-const update = function (data) {
+const update = function (data, user) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield recipe_1.default.findByIdAndUpdate(data.id, data, { new: true });
+        if (!user.recipes.includes(data._id)) {
+            throw Error("You do not have edit access to this recipe.");
+        }
+        return yield recipe_1.default.findByIdAndUpdate(data._id, data, { new: true });
     });
 };
 const updateAll = function (data) {
@@ -41,9 +46,13 @@ const updateAll = function (data) {
         return yield recipe_1.default.insertMany(data);
     });
 };
-const del = function (id) {
+const del = function (id, user) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield recipe_1.default.findByIdAndDelete(id);
+        if (!user.recipes.includes(id)) {
+            throw Error("You do not have permission to delete this recipe.");
+        }
+        yield recipe_1.default.findByIdAndDelete(id);
+        return { id };
     });
 };
 exports.default = {

@@ -67,12 +67,12 @@ const getRecipes = async function (id: string) {
 };
 
 const addRecipe = async function (user: IUserDocument, data: recipeData) {
+  
   const recipe = await new Recipe(data);
   await recipe.save();
   user.recipes.push(recipe._id);
   await user.save();
-
-  return { user, recipe };
+  return recipe;
 };
 
 const addRecipes = async function (_user: IUserDocument, data: recipeData[]) {
