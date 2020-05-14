@@ -66,7 +66,7 @@ class UserController {
     }
   };
 
-  static addRecipeToUser: RequestHandler = async (req, res) => {    // привязка питомца к пользователю
+  static addRecipeToUser: RequestHandler = async (req, res) => {    
     try {
       const result = await service.addRecipe(req.user, req.body); 
       res.status(201).send(result);
@@ -75,17 +75,8 @@ class UserController {
     }
   };
 
-  static addRecipesToUser: RequestHandler = async (req, res) => {    // привязка питомца к пользователю
-    try {
-      const result = await service.addRecipes(req.user, req.body); 
-      res.status(201).send(result);
-    } catch (e) {
-      res.status(400).send({ error: e.message });
-    }
-  };
 
-
-  static getUserWithRecipes: RequestHandler = async (req, res) => {    //получение всех питомцов пользователя
+  static getUserWithRecipes: RequestHandler = async (req, res) => {    
     try {
       const result = await service.getRecipes(req.params.id);
       res.status(201).send(result);

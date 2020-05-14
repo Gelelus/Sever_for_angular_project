@@ -61,9 +61,9 @@ UserController.getRecipe = (req, res) => __awaiter(void 0, void 0, void 0, funct
         res.status(400).send({ error: e.message });
     }
 });
-UserController.getAllRecipe = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+UserController.getAllRecipe = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield recipe_service_1.default.getAll();
+        const result = yield recipe_service_1.default.getAll(req.query);
         res.send(result);
     }
     catch (e) {

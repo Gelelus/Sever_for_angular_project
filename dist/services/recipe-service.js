@@ -27,9 +27,10 @@ const get = function (id) {
         return yield recipe_1.default.findById(id);
     });
 };
-const getAll = function () {
+const getAll = function (params) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield recipe_1.default.find({});
+        console.log(params);
+        return yield recipe_1.default.find().skip(+params.startItem).limit(+params.limit);
     });
 };
 const update = function (data, user) {
@@ -61,5 +62,5 @@ exports.default = {
     update,
     del,
     getAll,
-    updateAll
+    updateAll,
 };

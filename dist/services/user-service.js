@@ -80,12 +80,6 @@ const addRecipe = function (user, data) {
         return recipe;
     });
 };
-const addRecipes = function (_user, data) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const answer = yield recipe_1.default.insertMany(data, { ordered: false });
-        return { answer };
-    });
-};
 const bindRecipe = function (user, data) {
     return __awaiter(this, void 0, void 0, function* () {
         const recipe = yield recipe_1.default.findOne({ name: data.name });
@@ -115,5 +109,4 @@ exports.default = {
     bindRecipe,
     addAvatar,
     addRecipe,
-    addRecipes,
 };

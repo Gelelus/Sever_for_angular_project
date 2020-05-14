@@ -19,7 +19,6 @@ router.get("/:id", auth_1.default, user_controller_1.default.getUser);
 router.get("/", auth_1.default, user_controller_1.default.getAllUser);
 router.post("/recipe/bind", auth_1.default, user_controller_1.default.bindRecipeToUser);
 router.post("/recipe", auth_1.default, user_controller_1.default.addRecipeToUser);
-router.post("/recipes", auth_1.default, user_controller_1.default.addRecipesToUser);
 router.get("/recipe/:id", auth_1.default, user_controller_1.default.getUserWithRecipes);
 router.post("/login", validation_1.default(login_user_dto_1.default), user_controller_1.default.login);
 exports.default = router;

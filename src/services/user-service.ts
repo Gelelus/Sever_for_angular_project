@@ -75,15 +75,6 @@ const addRecipe = async function (user: IUserDocument, data: recipeData) {
   return recipe;
 };
 
-const addRecipes = async function (_user: IUserDocument, data: recipeData[]) {
-  const answer = await Recipe.insertMany(data, { ordered: false });
-
-  //user.recipes.push(recipe._id);
-  //await user.save();
-
-  return { answer };
-};
-
 const bindRecipe = async function (
   user: IUserDocument,
   data: { name: string }
@@ -117,5 +108,4 @@ export default {
   bindRecipe,
   addAvatar,
   addRecipe,
-  addRecipes,
 };

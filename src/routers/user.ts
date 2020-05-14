@@ -25,7 +25,7 @@ router.post("/recipe/bind", auth, UserController.bindRecipeToUser); // прив�
 router.post("/recipe", auth, UserController.addRecipeToUser); // добавление рецепта юсера
 
 
-router.post("/recipes", auth, UserController.addRecipesToUser); // добавление рецептов юсеру
+
 router.get("/recipe/:id", auth, UserController.getUserWithRecipes); // 
 
 router.post("/login",validation(validLoginUser) , UserController.login); //авторизация
