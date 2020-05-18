@@ -3,19 +3,18 @@ import { Router } from "express";
 // import validation from "../middleware/validation";
 // import validCreateRecipe from "../dtos/create-recipe.dto";
 
-import auth from "../middleware/auth";
-
+import Upload from "../middleware/uploadRecipe";
 import RecipeController from "../controllers/recipe-controller";
 
 const router = Router();
 
-router.post("/", auth, RecipeController.addRecipe); //добавление
+router.get("/:id", RecipeController.getRecipe); // получение одного
+router.get("/", RecipeController.getAllRecipe); // получение всех
 
-router.put("/update", auth, RecipeController.updateRecipes); //полное обновление
+router.post("/", Upload, RecipeController.addRecipe); //добавление
 
-router.delete("/:id", auth, RecipeController.deleteRecipe); // удаление
-router.put("/", auth, RecipeController.updateRecipe); // изменение
-router.get("/:id", auth, RecipeController.getRecipe); // получение одного
-router.get("/", auth, RecipeController.getAllRecipe); // получение всех
+router.put("/", Upload, RecipeController.updateRecipe); // изменение
+
+router.delete("/:id", RecipeController.deleteRecipe); // удаление
 
 export default router;

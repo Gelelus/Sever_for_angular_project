@@ -15,9 +15,10 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const options_1 = __importDefault(require("./middleware/options"));
 const router = __importStar(require("./routers/export-router"));
+const auth_1 = __importDefault(require("./middleware/auth"));
 dotenv_1.default.config();
 if (!process.env.MONGO_DB) {
-    throw new Error('please create .env file as .env.example');
+    throw new Error("please create .env file as .env.example");
 }
 mongoose_1.default
     .connect(process.env.MONGO_DB, {
@@ -38,7 +39,7 @@ const port = process.env.PORT || 8080;
 app.use(express_1.default.json());
 app.use(options_1.default);
 app.use("/users", router.userRouter);
-app.use("/recipes", router.recipeRouter);
+app.use("/recipes", auth_1.default, router.recipeRouter);
 app.use(express_1.default.static(process.cwd() + "/public"));
 app.listen(port, () => {
     console.log("server on port " + port);

@@ -4,10 +4,13 @@ import dotenv from "dotenv";
 
 import options from "./middleware/options";
 import * as router from "./routers/export-router";
+import auth from "./middleware/auth";
 
 dotenv.config(); //env reader
 
-if(!process.env.MONGO_DB){throw new Error('please create .env file as .env.example')}
+if (!process.env.MONGO_DB) {
+  throw new Error("please create .env file as .env.example");
+}
 mongoose
   .connect(process.env.MONGO_DB, {
     useNewUrlParser: true,
@@ -31,9 +34,9 @@ const app = express();
 const port = process.env.PORT || 8080;
 
 app.use(express.json());
-app.use(options)
+app.use(options);
 app.use("/users", router.userRouter);
-app.use("/recipes", router.recipeRouter);
+app.use("/recipes", auth, router.recipeRouter);
 app.use(express.static(process.cwd() + "/public"));
 
 app.listen(port, () => {

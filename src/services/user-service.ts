@@ -68,6 +68,8 @@ const getRecipes = async function (id: string) {
 
 const addRecipe = async function (user: IUserDocument, data: recipeData) {
   
+
+  
   const recipe = await new Recipe(data);
   await recipe.save();
   user.recipes.push(recipe._id);
@@ -92,7 +94,7 @@ const bindRecipe = async function (
 };
 
 const addAvatar = async function (file: File, user: IUserDocument) {
-  user.avatarImg = "/public/img/avatars/" + file.filename;
+  user.avatarImg = "img/avatars/" + file.filename;
   await user.save();
   return user;
 };

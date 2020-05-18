@@ -93,7 +93,7 @@ const bindRecipe = function (user, data) {
 };
 const addAvatar = function (file, user) {
     return __awaiter(this, void 0, void 0, function* () {
-        user.avatarImg = "/public/img/avatars/" + file.filename;
+        user.avatarImg = "img/avatars/" + file.filename;
         yield user.save();
         return user;
     });
