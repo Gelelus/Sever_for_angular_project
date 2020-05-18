@@ -75,7 +75,9 @@ const del = function (id, user) {
         if (!recipe) {
             throw Error("Recipe doesn't exist");
         }
-        fs_1.default.unlinkSync("public/" + recipe.imagePath);
+        if (recipe.imagePath !== "img/avatars/index.jpg") {
+            fs_1.default.unlinkSync("public/" + recipe.imagePath);
+        }
         yield recipe.remove();
         user.recipes = user.recipes.filter((resId) => resId !== id);
         yield user.save();

@@ -28,7 +28,11 @@ const add = function (data) {
             localId: user._id,
             email: user.email,
             expiresIn: 3600,
-            avatarUrl: user.avatarImg
+            avatarUrl: user.avatarImg,
+            firstName: user.firstName,
+            secondName: user.secondName,
+            date: user.date,
+            phoneNumber: user.phoneNumber
         };
     });
 };
@@ -61,7 +65,11 @@ const login = function (data) {
             localId: user._id,
             email: user.email,
             expiresIn: 3600,
-            avatarUrl: user.avatarImg
+            avatarUrl: user.avatarImg,
+            firstName: user.firstName,
+            secondName: user.secondName,
+            date: user.date,
+            phoneNumber: user.phoneNumber
         };
     });
 };

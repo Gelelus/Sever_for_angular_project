@@ -1,3 +1,4 @@
 node_modules
-
+public/img/avatars/*
+public/img/recipes/*
 .env

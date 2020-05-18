@@ -1,8 +1,10 @@
-import { Document } from 'mongoose';
+import { Document } from "mongoose";
 
 export interface IRecipeDocument extends Document {
-    name: string;
-    description: string;
-    imagePath: string;
-    ingredients: {name: string, amount: number}[];
+  name: string;
+  description: string;
+  imagePath: string;
+  ingredients: { name: string; amount: number }[];
+  users: string[];
+  date: Date;
 }

@@ -79,7 +79,9 @@ const del = async function (id: string, user: IUserDocument) {
     throw Error("Recipe doesn't exist");
   }
   
-  fs.unlinkSync("public/" + recipe.imagePath);
+  if (recipe.imagePath !== "img/avatars/index.jpg") {
+    fs.unlinkSync("public/" + recipe.imagePath);
+  }
 
   await recipe.remove();
   user.recipes = user.recipes.filter((resId) => resId !== id);

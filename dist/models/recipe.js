@@ -14,9 +14,16 @@ const recipeSchema = new mongoose_1.Schema({
     },
     imagePath: {
         type: String,
-        required: true,
+        default: "img/avatars/index.jpg",
         trim: true,
     },
-    ingredients: [{ name: String, amount: Number }]
+    ingredients: [{ name: String, amount: Number }],
+    date: { type: Date, default: Date.now },
+    users: [
+        {
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: "User",
+        },
+    ],
 });
 exports.default = mongoose_1.model("Recipe", recipeSchema);
