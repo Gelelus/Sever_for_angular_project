@@ -1,30 +1,37 @@
-import multer from 'multer';
-import {fileFilterHandler} from '../interfaces/MulterFileFilter'
-import { v4 as uuidv4 } from 'uuid';
+import multer from "multer";
+import { fileFilterHandler } from "../interfaces/MulterFileFilter";
+import { v4 as uuidv4 } from "uuid";
 
 const path = process.cwd() + "/public/img/avatars";
 
+const MIME_TYPE_MAP: {
+  [key: string]: string;
+} = {
+  "image/png": "png",
+  "image/jpg": "jpg",
+  "image/jpeg": "jpg",
+  "image/gif": "gif",
+};
+
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {
-      cb(null, path);
+    cb(null, path);
   },
   filename: (_req, file, cb) => {
-      cb(null, uuidv4().toString() + "_" + file.originalname);
-  }
+    const ext = MIME_TYPE_MAP[file.mimetype];
+    cb(null, uuidv4().toString() + "_" + file.originalname + "." + ext);
+  },
 });
 
-
-const fileFilter : fileFilterHandler = (_req, file, cb) : void => {
-  if (file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-      cb(null, true);
+const fileFilter: fileFilterHandler = (_req, file, cb): void => {
+  if (MIME_TYPE_MAP[file.mimetype]) {
+    cb(null, true);
   } else {
-      cb(new Error("Type file is not access"));
+    cb(new Error("Baf file type"));
   }
 };
 
 export default multer({
   storage,
   fileFilter,
-  limits: {fileSize: 1024 * 1024 * 5} // 5 Мегабайт
-}).single('avatar');
-
+}).single("image");

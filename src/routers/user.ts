@@ -15,12 +15,13 @@ router.get("/", auth, UserController.getAllUser); // получение всех
 router.get("/recipe/:id", auth, UserController.getUserWithRecipes); // 
 
 router.post("/", validation(validCreateUser),  UserController.addUser); //регистрация
-router.post("/upload/avatar", auth, avatarUpload, UserController.addAvatarToUser); // загрузка аватара для пользователя
+
 router.post("/recipe/bind", auth, UserController.bindRecipeToUser); // привязка сторонего рецепта
 router.post("/recipe", auth, UserController.addRecipeToUser); // добавление рецепта юсера
 router.post("/login",validation(validLoginUser) , UserController.login); //авторизация
 
 router.put("/", auth, UserController.updateUser); // изменение пользователя
+router.put("/avatar", auth, avatarUpload, UserController.addAvatarToUser); // изменение аватара пользователя
 
 router.delete("/:id", auth, UserController.deleteUser); // удаление пользователя
 

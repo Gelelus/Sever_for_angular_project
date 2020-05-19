@@ -1,6 +1,7 @@
+import fs from "fs";
+
 import { File } from "../interfaces/MulterFileFilter";
 import { IUserDocument } from "../interfaces/IUserDocument";
-
 import User from "../models/user";
 import Recipe from "../models/recipe";
 import { recipeData } from "../interfaces/recipeData";
@@ -122,9 +123,15 @@ const bindRecipe = async function (
 };
 
 const addAvatar = async function (file: File, user: IUserDocument) {
+  
+  if(user.avatarImg !== "img/avatars/avatar.png"){
+    fs.unlinkSync("public/" + user.avatarImg);
+  }
+
   user.avatarImg = "img/avatars/" + file.filename;
   await user.save();
-  return user;
+  
+  return {imgUrl: "img/avatars/" + file.filename};
 };
 
 export default {

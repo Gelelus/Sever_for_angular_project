@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const fs_1 = __importDefault(require("fs"));
 const user_1 = __importDefault(require("../models/user"));
 const recipe_1 = __importDefault(require("../models/recipe"));
 const add = function (data) {
@@ -119,9 +120,12 @@ const bindRecipe = function (user, data) {
 };
 const addAvatar = function (file, user) {
     return __awaiter(this, void 0, void 0, function* () {
+        if (user.avatarImg !== "img/avatars/avatar.png") {
+            fs_1.default.unlinkSync("public/" + user.avatarImg);
+        }
         user.avatarImg = "img/avatars/" + file.filename;
         yield user.save();
-        return user;
+        return { imgUrl: "img/avatars/" + file.filename };
     });
 };
 exports.default = {

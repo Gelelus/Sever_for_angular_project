@@ -6,24 +6,30 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const multer_1 = __importDefault(require("multer"));
 const uuid_1 = require("uuid");
 const path = process.cwd() + "/public/img/avatars";
+const MIME_TYPE_MAP = {
+    "image/png": "png",
+    "image/jpg": "jpg",
+    "image/jpeg": "jpg",
+    "image/gif": "gif",
+};
 const storage = multer_1.default.diskStorage({
     destination: (_req, _file, cb) => {
         cb(null, path);
     },
     filename: (_req, file, cb) => {
-        cb(null, uuid_1.v4().toString() + "_" + file.originalname);
-    }
+        const ext = MIME_TYPE_MAP[file.mimetype];
+        cb(null, uuid_1.v4().toString() + "_" + file.originalname + "." + ext);
+    },
 });
 const fileFilter = (_req, file, cb) => {
-    if (file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+    if (MIME_TYPE_MAP[file.mimetype]) {
         cb(null, true);
     }
     else {
-        cb(new Error("Type file is not access"));
+        cb(new Error("Baf file type"));
     }
 };
 exports.default = multer_1.default({
     storage,
     fileFilter,
-    limits: { fileSize: 1024 * 1024 * 5 }
-}).single('avatar');
+}).single("image");
