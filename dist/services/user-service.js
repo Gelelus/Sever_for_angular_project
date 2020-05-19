@@ -32,7 +32,7 @@ const add = function (data) {
             firstName: user.firstName,
             secondName: user.secondName,
             date: user.date,
-            phoneNumber: user.phoneNumber
+            phoneNumber: user.phoneNumber,
         };
     });
 };
@@ -46,9 +46,27 @@ const getAll = function () {
         return yield user_1.default.find({});
     });
 };
-const update = function (data) {
+const update = function (data, user) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield user_1.default.findByIdAndUpdate(data.id, data, { new: true });
+        user.firstName = data.firstName;
+        user.secondName = data.secondName;
+        user.phoneNumber = data.phoneNumber;
+        if (data.passwords.password) {
+            user.password = data.passwords.password;
+        }
+        const token = yield user.generateAuthToken();
+        yield user.save();
+        return {
+            idToken: token,
+            localId: user._id,
+            email: user.email,
+            expiresIn: 3600,
+            avatarUrl: user.avatarImg,
+            firstName: user.firstName,
+            secondName: user.secondName,
+            date: user.date,
+            phoneNumber: user.phoneNumber,
+        };
     });
 };
 const del = function (id) {
@@ -69,7 +87,7 @@ const login = function (data) {
             firstName: user.firstName,
             secondName: user.secondName,
             date: user.date,
-            phoneNumber: user.phoneNumber
+            phoneNumber: user.phoneNumber,
         };
     });
 };

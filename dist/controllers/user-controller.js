@@ -36,7 +36,7 @@ UserController.deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, func
 });
 UserController.updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield user_service_1.default.update(req.body);
+        const result = yield user_service_1.default.update(req.body, req.user);
         res.status(201).send(result);
     }
     catch (e) {

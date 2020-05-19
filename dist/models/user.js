@@ -46,7 +46,7 @@ const userSchema = new mongoose_1.Schema({
     phoneNumber: {
         type: String,
         trim: true,
-        default: "",
+        default: "+375",
     },
     recipes: [
         {

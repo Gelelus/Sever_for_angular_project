@@ -36,7 +36,7 @@ const userSchema = new Schema({
   phoneNumber:{
     type: String,
     trim: true,
-    default: "",
+    default: "+375",
   },
   recipes: [
     {

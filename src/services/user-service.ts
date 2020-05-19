@@ -6,27 +6,26 @@ import Recipe from "../models/recipe";
 import { recipeData } from "../interfaces/recipeData";
 
 const add = async function (data: { password: string; email: string }) {
-  const userTest = await User.findOne({ email: data.email });//
+  const userTest = await User.findOne({ email: data.email });
   if (userTest) {
     throw new Error("Email already exists");
-  } 
-    const user = new User(data);
+  }
+  const user = new User(data);
 
-    const token = await user.generateAuthToken();
-    await user.save();
+  const token = await user.generateAuthToken();
+  await user.save();
 
-    return {
-      idToken: token,
-      localId: user._id,
-      email: user.email,
-      expiresIn: 3600,
-      avatarUrl: user.avatarImg,
-      firstName: user.firstName,
-      secondName: user.secondName,
-      date: user.date,
-      phoneNumber: user.phoneNumber
-    };
-  
+  return {
+    idToken: token,
+    localId: user._id,
+    email: user.email,
+    expiresIn: 3600,
+    avatarUrl: user.avatarImg,
+    firstName: user.firstName,
+    secondName: user.secondName,
+    date: user.date,
+    phoneNumber: user.phoneNumber,
+  };
 };
 
 const get = async function (id: string) {
@@ -37,23 +36,25 @@ const getAll = async function () {
   return await User.find({});
 };
 
-const update = async function (data: {
-  id: string;
-  age: number;
-  name: string;
-}) {
-  return await User.findByIdAndUpdate(data.id, data, { new: true });
-};
+const update = async function (
+  data: {
+    firstName: string;
+    passwords: { password: string; secondPassword: string };
+    phoneNumber: string;
+    secondName: string;
+  },
+  user: IUserDocument
+) {
+ 
+  user.firstName = data.firstName;
+  user.secondName = data.secondName;
+  user.phoneNumber = data.phoneNumber;
+  if (data.passwords.password) {
+    user.password = data.passwords.password;
+  }
 
-const del = async function (id: string) {
-  return await User.findByIdAndDelete(id);
-};
-
-const login = async function (data: { password: string; email: string }) {
-  const user = await User.findByCredentials(data.email, data.password); //статик метод из model проверка хэша и логина
-
-  const token = await user.generateAuthToken(); // генерация токена
-  
+  const token = await user.generateAuthToken();
+  await user.save();
   return {
     idToken: token,
     localId: user._id,
@@ -63,7 +64,29 @@ const login = async function (data: { password: string; email: string }) {
     firstName: user.firstName,
     secondName: user.secondName,
     date: user.date,
-    phoneNumber: user.phoneNumber
+    phoneNumber: user.phoneNumber,
+  };
+};
+
+const del = async function (id: string) {
+  return await User.findByIdAndDelete(id);
+};
+
+const login = async function (data: { password: string; email: string }) {
+  const user = await User.findByCredentials(data.email, data.password);
+
+  const token = await user.generateAuthToken();
+
+  return {
+    idToken: token,
+    localId: user._id,
+    email: user.email,
+    expiresIn: 3600,
+    avatarUrl: user.avatarImg,
+    firstName: user.firstName,
+    secondName: user.secondName,
+    date: user.date,
+    phoneNumber: user.phoneNumber,
   };
 };
 
@@ -75,9 +98,6 @@ const getRecipes = async function (id: string) {
 };
 
 const addRecipe = async function (user: IUserDocument, data: recipeData) {
-  
-
-  
   const recipe = await new Recipe(data);
   await recipe.save();
   user.recipes.push(recipe._id);
