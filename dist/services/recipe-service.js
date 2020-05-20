@@ -36,6 +36,10 @@ const get = function (id) {
 };
 const getAll = function (params) {
     return __awaiter(this, void 0, void 0, function* () {
+        if (params.limit === "0" || (!params.limit && !params.startItem)) {
+            params.limit = "5";
+            params.startItem = "0";
+        }
         const maxRecipes = yield recipe_1.default.countDocuments();
         const recipes = yield recipe_1.default.find()
             .skip(+params.startItem)

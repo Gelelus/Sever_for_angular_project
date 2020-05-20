@@ -48,6 +48,15 @@ class UserController {
     }
   };
 
+  static getUserOrders: RequestHandler = async (req, res) => {
+    try {
+      const result = await service.getOrders(req.user);
+      res.send(result);
+    } catch (e) {
+      res.status(400).send({ error: e.message });
+    }
+  };
+
   static login: RequestHandler = async (req, res) => {
     try {
       const result = await service.login(req.body);

@@ -1,18 +1,19 @@
 import Order from "../models/order";
 import { IUserDocument } from "../interfaces/IUserDocument";
 
-//////////////////////////////adasdadsad
+
 const add = async function (
-  data: { ingredients: { name: string; amount: number }[] },
+  data: { name: string; amount: number }[] ,
   user: IUserDocument
 ) {
+   
   const order = new Order({
-    ingredients: data.ingredients,
+    ingredients: data,
   });
   await order.save();
   user.orders.push(order._id);
   await user.save();
-  return order;
+  return {ok:"all ok"};
 };
 
 const get = async function (id: string) {

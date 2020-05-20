@@ -99,7 +99,7 @@ const getRecipes = async function (id: string) {
 };
 
 const addRecipe = async function (user: IUserDocument, data: recipeData) {
-  const recipe = await new Recipe(data);
+  const recipe = new Recipe(data);
   await recipe.save();
   user.recipes.push(recipe._id);
   await user.save();
@@ -134,6 +134,11 @@ const addAvatar = async function (file: File, user: IUserDocument) {
   return {imgUrl: "img/avatars/" + file.filename};
 };
 
+const getOrders = async function (user: IUserDocument) {
+  
+  return (await user.populate("orders").execPopulate()).orders;
+};
+
 export default {
   add,
   get,
@@ -145,4 +150,5 @@ export default {
   bindRecipe,
   addAvatar,
   addRecipe,
+  getOrders
 };

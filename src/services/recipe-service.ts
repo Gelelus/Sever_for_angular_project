@@ -26,7 +26,11 @@ const get = async function (id: string) {
   return await Recipe.findById(id);
 };
 
-const getAll = async function (params: { startItem: number; limit: number }) {
+const getAll = async function (params: { startItem: string; limit: string }) {
+  if (params.limit === "0" || (!params.limit && !params.startItem)) {
+    params.limit = "5";
+    params.startItem = "0";
+  }
   const maxRecipes = await Recipe.countDocuments();
   const recipes = await Recipe.find()
     .skip(+params.startItem)
@@ -78,7 +82,7 @@ const del = async function (id: string, user: IUserDocument) {
   if (!recipe) {
     throw Error("Recipe doesn't exist");
   }
-  
+
   if (recipe.imagePath !== "img/avatars/index.jpg") {
     fs.unlinkSync("public/" + recipe.imagePath);
   }

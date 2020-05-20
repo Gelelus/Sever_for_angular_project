@@ -22,7 +22,7 @@ const auth: RequestHandler = async (req, res, next) => {
     } else if (Date.now() > decoded.expiresIn) {
       throw new Error();
     }
-
+    
     req.user = user;
     next();
   } catch (e) {

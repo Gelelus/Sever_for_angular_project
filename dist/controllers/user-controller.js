@@ -61,6 +61,15 @@ UserController.getAllUser = (_req, res) => __awaiter(void 0, void 0, void 0, fun
         res.status(400).send({ error: e.message });
     }
 });
+UserController.getUserOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield user_service_1.default.getOrders(req.user);
+        res.send(result);
+    }
+    catch (e) {
+        res.status(400).send({ error: e.message });
+    }
+});
 UserController.login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield user_service_1.default.login(req.body);

@@ -100,7 +100,7 @@ const getRecipes = function (id) {
 };
 const addRecipe = function (user, data) {
     return __awaiter(this, void 0, void 0, function* () {
-        const recipe = yield new recipe_1.default(data);
+        const recipe = new recipe_1.default(data);
         yield recipe.save();
         user.recipes.push(recipe._id);
         yield user.save();
@@ -128,6 +128,11 @@ const addAvatar = function (file, user) {
         return { imgUrl: "img/avatars/" + file.filename };
     });
 };
+const getOrders = function (user) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return (yield user.populate("orders").execPopulate()).orders;
+    });
+};
 exports.default = {
     add,
     get,
@@ -139,4 +144,5 @@ exports.default = {
     bindRecipe,
     addAvatar,
     addRecipe,
+    getOrders
 };
