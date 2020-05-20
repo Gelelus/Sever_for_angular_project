@@ -7,3 +7,5 @@ const user_1 = __importDefault(require("../routers/user"));
 exports.userRouter = user_1.default;
 const recipe_1 = __importDefault(require("../routers/recipe"));
 exports.recipeRouter = recipe_1.default;
+const order_1 = __importDefault(require("../routers/order"));
+exports.orderRouter = order_1.default;

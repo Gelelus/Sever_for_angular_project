@@ -36,7 +36,7 @@ UserController.deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, func
 });
 UserController.updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield user_service_1.default.update(req.body);
+        const result = yield user_service_1.default.update(req.body, req.user);
         res.status(201).send(result);
     }
     catch (e) {
@@ -55,6 +55,15 @@ UserController.getUser = (req, res) => __awaiter(void 0, void 0, void 0, functio
 UserController.getAllUser = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield user_service_1.default.getAll();
+        res.send(result);
+    }
+    catch (e) {
+        res.status(400).send({ error: e.message });
+    }
+});
+UserController.getUserOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield user_service_1.default.getOrders(req.user);
         res.send(result);
     }
     catch (e) {
@@ -82,15 +91,6 @@ UserController.bindRecipeToUser = (req, res) => __awaiter(void 0, void 0, void 0
 UserController.addRecipeToUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield user_service_1.default.addRecipe(req.user, req.body);
-        res.status(201).send(result);
-    }
-    catch (e) {
-        res.status(400).send({ error: e.message });
-    }
-});
-UserController.addRecipesToUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const result = yield user_service_1.default.addRecipes(req.user, req.body);
         res.status(201).send(result);
     }
     catch (e) {

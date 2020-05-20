@@ -13,11 +13,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const recipe_1 = __importDefault(require("../models/recipe"));
-const add = function (data) {
+const fs_1 = __importDefault(require("fs"));
+const add = function (data, user, file) {
     return __awaiter(this, void 0, void 0, function* () {
-        const pet = new recipe_1.default(data);
-        yield pet.save();
-        return pet;
+        const ingredients = JSON.parse(data.ingredients);
+        const recipe = new recipe_1.default({
+            name: data.name,
+            description: data.description,
+            ingredients: ingredients,
+            imagePath: "img/recipes/" + file.filename,
+        });
+        yield recipe.save();
+        user.recipes.push(recipe._id);
+        yield user.save();
+        return recipe;
     });
 };
 const get = function (id) {
@@ -25,25 +34,58 @@ const get = function (id) {
         return yield recipe_1.default.findById(id);
     });
 };
-const getAll = function () {
+const getAll = function (params) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield recipe_1.default.find({});
+        if (params.limit === "0" || (!params.limit && !params.startItem)) {
+            params.limit = "5";
+            params.startItem = "0";
+        }
+        const maxRecipes = yield recipe_1.default.countDocuments();
+        const recipes = yield recipe_1.default.find()
+            .skip(+params.startItem)
+            .limit(+params.limit);
+        return { recipes, maxRecipes };
     });
 };
-const update = function (data) {
+const update = function (data, user, file) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield recipe_1.default.findByIdAndUpdate(data.id, data, { new: true });
+        if (user && !user.recipes.includes(data._id)) {
+            throw Error("You do not have edit access to this recipe.");
+        }
+        if (file && typeof data.ingredients === "string") {
+            const ingredients = JSON.parse(data.ingredients);
+            const recipe = yield recipe_1.default.findById(data._id);
+            if (!recipe) {
+                throw Error("Recipe doesn't exist");
+            }
+            fs_1.default.unlinkSync("public/" + recipe.imagePath);
+            recipe.name = data.name;
+            recipe.description = data.description;
+            recipe.ingredients = ingredients;
+            recipe.imagePath = "img/recipes/" + file.filename;
+            return yield recipe.save();
+        }
+        else {
+            return yield recipe_1.default.findByIdAndUpdate(data._id, data, { new: true });
+        }
     });
 };
-const updateAll = function (data) {
+const del = function (id, user) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield recipe_1.default.deleteMany({});
-        return yield recipe_1.default.insertMany(data);
-    });
-};
-const del = function (id) {
-    return __awaiter(this, void 0, void 0, function* () {
-        return yield recipe_1.default.findByIdAndDelete(id);
+        if (!user.recipes.includes(id)) {
+            throw Error("You do not have permission to delete this recipe.");
+        }
+        const recipe = yield recipe_1.default.findById(id);
+        if (!recipe) {
+            throw Error("Recipe doesn't exist");
+        }
+        if (recipe.imagePath !== "img/avatars/index.jpg") {
+            fs_1.default.unlinkSync("public/" + recipe.imagePath);
+        }
+        yield recipe.remove();
+        user.recipes = user.recipes.filter((resId) => resId !== id);
+        yield user.save();
+        return { id };
     });
 };
 exports.default = {
@@ -52,5 +94,4 @@ exports.default = {
     update,
     del,
     getAll,
-    updateAll
 };

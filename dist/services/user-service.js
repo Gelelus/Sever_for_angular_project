@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const fs_1 = __importDefault(require("fs"));
 const user_1 = __importDefault(require("../models/user"));
 const recipe_1 = __importDefault(require("../models/recipe"));
 const add = function (data) {
@@ -28,7 +29,11 @@ const add = function (data) {
             localId: user._id,
             email: user.email,
             expiresIn: 3600,
-            avatarUrl: user.avatarImg
+            avatarUrl: user.avatarImg,
+            firstName: user.firstName,
+            secondName: user.secondName,
+            date: user.date,
+            phoneNumber: user.phoneNumber,
         };
     });
 };
@@ -42,9 +47,27 @@ const getAll = function () {
         return yield user_1.default.find({});
     });
 };
-const update = function (data) {
+const update = function (data, user) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield user_1.default.findByIdAndUpdate(data.id, data, { new: true });
+        user.firstName = data.firstName;
+        user.secondName = data.secondName;
+        user.phoneNumber = data.phoneNumber;
+        if (data.passwords.password) {
+            user.password = data.passwords.password;
+        }
+        const token = yield user.generateAuthToken();
+        yield user.save();
+        return {
+            idToken: token,
+            localId: user._id,
+            email: user.email,
+            expiresIn: 3600,
+            avatarUrl: user.avatarImg,
+            firstName: user.firstName,
+            secondName: user.secondName,
+            date: user.date,
+            phoneNumber: user.phoneNumber,
+        };
     });
 };
 const del = function (id) {
@@ -61,7 +84,11 @@ const login = function (data) {
             localId: user._id,
             email: user.email,
             expiresIn: 3600,
-            avatarUrl: user.avatarImg
+            avatarUrl: user.avatarImg,
+            firstName: user.firstName,
+            secondName: user.secondName,
+            date: user.date,
+            phoneNumber: user.phoneNumber,
         };
     });
 };
@@ -73,17 +100,11 @@ const getRecipes = function (id) {
 };
 const addRecipe = function (user, data) {
     return __awaiter(this, void 0, void 0, function* () {
-        const recipe = yield new recipe_1.default(data);
+        const recipe = new recipe_1.default(data);
         yield recipe.save();
         user.recipes.push(recipe._id);
         yield user.save();
-        return { user, recipe };
-    });
-};
-const addRecipes = function (_user, data) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const answer = yield recipe_1.default.insertMany(data, { ordered: false });
-        return { answer };
+        return recipe;
     });
 };
 const bindRecipe = function (user, data) {
@@ -99,9 +120,17 @@ const bindRecipe = function (user, data) {
 };
 const addAvatar = function (file, user) {
     return __awaiter(this, void 0, void 0, function* () {
-        user.avatarImg = "/public/img/avatars/" + file.filename;
+        if (user.avatarImg !== "img/avatars/avatar.png") {
+            fs_1.default.unlinkSync("public/" + user.avatarImg);
+        }
+        user.avatarImg = "img/avatars/" + file.filename;
         yield user.save();
-        return user;
+        return { imgUrl: "img/avatars/" + file.filename };
+    });
+};
+const getOrders = function (user) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return (yield user.populate("orders").execPopulate()).orders;
     });
 };
 exports.default = {
@@ -115,5 +144,5 @@ exports.default = {
     bindRecipe,
     addAvatar,
     addRecipe,
-    addRecipes,
+    getOrders
 };

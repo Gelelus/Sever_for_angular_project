@@ -23,7 +23,7 @@ class UserController {
 
   static updateUser: RequestHandler = async (req, res) => {
     try {
-      const result = await service.update(req.body);
+      const result = await service.update(req.body, req.user);
       res.status(201).send(result);
     } catch (e) {
       res.status(400).send({ error: e.message });
@@ -38,10 +38,19 @@ class UserController {
       res.status(400).send({ error: e.message });
     }
   };
-  
+
   static getAllUser: RequestHandler = async (_req, res) => {
     try {
       const result = await service.getAll();
+      res.send(result);
+    } catch (e) {
+      res.status(400).send({ error: e.message });
+    }
+  };
+
+  static getUserOrders: RequestHandler = async (req, res) => {
+    try {
+      const result = await service.getOrders(req.user);
       res.send(result);
     } catch (e) {
       res.status(400).send({ error: e.message });
@@ -57,35 +66,25 @@ class UserController {
     }
   };
 
-  static bindRecipeToUser: RequestHandler = async (req, res) => {    // привязка питомца к пользователю
+  static bindRecipeToUser: RequestHandler = async (req, res) => {
     try {
-      const result = await service.bindRecipe(req.user, req.body); // name id
+      const result = await service.bindRecipe(req.user, req.body);
       res.status(201).send(result);
     } catch (e) {
       res.status(400).send({ error: e.message });
     }
   };
 
-  static addRecipeToUser: RequestHandler = async (req, res) => {    // привязка питомца к пользователю
+  static addRecipeToUser: RequestHandler = async (req, res) => {
     try {
-      const result = await service.addRecipe(req.user, req.body); 
+      const result = await service.addRecipe(req.user, req.body);
       res.status(201).send(result);
     } catch (e) {
       res.status(400).send({ error: e.message });
     }
   };
 
-  static addRecipesToUser: RequestHandler = async (req, res) => {    // привязка питомца к пользователю
-    try {
-      const result = await service.addRecipes(req.user, req.body); 
-      res.status(201).send(result);
-    } catch (e) {
-      res.status(400).send({ error: e.message });
-    }
-  };
-
-
-  static getUserWithRecipes: RequestHandler = async (req, res) => {    //получение всех питомцов пользователя
+  static getUserWithRecipes: RequestHandler = async (req, res) => {
     try {
       const result = await service.getRecipes(req.params.id);
       res.status(201).send(result);
@@ -94,7 +93,7 @@ class UserController {
     }
   };
 
-  static addAvatarToUser: RequestHandler = async (req, res) => {    //добавление аватара 
+  static addAvatarToUser: RequestHandler = async (req, res) => {
     try {
       const result = await service.addAvatar(req.file, req.user);
       res.status(201).send(result);
@@ -102,7 +101,6 @@ class UserController {
       res.status(400).send({ error: e.message });
     }
   };
-
 }
 
 export default UserController;

@@ -1,4 +1,4 @@
-import mongoose, { Schema, model } from "mongoose";
+import { Schema, model } from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -17,24 +17,37 @@ const userSchema = new Schema({
     unique: true,
     trim: true,
   },
-  age: {
-    type: String,
-    trim: true,
-  },
-
   avatarImg: {
     type: String,
     trim: true,
-    default: 'img/avatars/avatar.png'
+    default: "img/avatars/avatar.png",
   },
-  name: {
+  date: { type: Date, default: Date.now },
+  firstName: {
     type: String,
     trim: true,
+    default: "Nameless",
+  },
+  secondName: {
+    type: String,
+    trim: true,
+    default: "User",
+  },
+  phoneNumber:{
+    type: String,
+    trim: true,
+    default: "+375",
   },
   recipes: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Recipe",
+    },
+  ],
+  orders: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Order",
     },
   ],
 });
@@ -43,7 +56,6 @@ userSchema.statics.findByCredentials = async (
   email: string,
   password: string
 ): Promise<IUserDocument> => {
-  
   const user = await User.findOne({ email: email });
 
   if (!user) {
@@ -64,7 +76,7 @@ userSchema.methods.generateAuthToken = async function (): Promise<string> {
   const token = jwt.sign(
     {
       _id: user._id.toString(),
-      expiresIn: Date.now() + 3600000,//токен час
+      expiresIn: Date.now() + 3600000, //токен час
     },
     "expressapp"
   );

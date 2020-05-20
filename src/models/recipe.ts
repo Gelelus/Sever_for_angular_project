@@ -4,7 +4,6 @@ import { IRecipeDocument } from "../interfaces/IRecipeDocument";
 const recipeSchema = new Schema({
   name: {
     type: String,
-    unique: true,
     required: true,
     trim: true,
   },
@@ -15,10 +14,17 @@ const recipeSchema = new Schema({
   },
   imagePath: {
     type: String,
-    required: true,
+    default: "img/avatars/index.jpg",
     trim: true,
   },
-  ingredients: [{name: String, amount: Number}]
+  ingredients: [{ name: String, amount: Number }],
+  date: { type: Date, default: Date.now },
+  users: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
 });
 
 export default model<IRecipeDocument>("Recipe", recipeSchema);

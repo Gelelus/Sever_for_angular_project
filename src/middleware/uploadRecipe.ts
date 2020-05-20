@@ -2,7 +2,7 @@ import multer from "multer";
 import { fileFilterHandler } from "../interfaces/MulterFileFilter";
 import { v4 as uuidv4 } from "uuid";
 
-const path = process.cwd() + "/public/img/avatars";
+const path = process.cwd() + "/public/img/recipes";
 
 const MIME_TYPE_MAP: {
   [key: string]: string;
@@ -27,7 +27,7 @@ const fileFilter: fileFilterHandler = (_req, file, cb): void => {
   if (MIME_TYPE_MAP[file.mimetype]) {
     cb(null, true);
   } else {
-    cb(new Error("Baf file type"));
+    cb(new Error("Type file is not access"));
   }
 };
 

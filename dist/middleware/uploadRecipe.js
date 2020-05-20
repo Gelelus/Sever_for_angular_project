@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const multer_1 = __importDefault(require("multer"));
 const uuid_1 = require("uuid");
-const path = process.cwd() + "/public/img/avatars";
+const path = process.cwd() + "/public/img/recipes";
 const MIME_TYPE_MAP = {
     "image/png": "png",
     "image/jpg": "jpg",
@@ -26,7 +26,7 @@ const fileFilter = (_req, file, cb) => {
         cb(null, true);
     }
     else {
-        cb(new Error("Baf file type"));
+        cb(new Error("Type file is not access"));
     }
 };
 exports.default = multer_1.default({

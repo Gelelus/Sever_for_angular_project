@@ -1,12 +1,13 @@
 import service from "../services/recipe-service";
 import { RequestHandler } from "express";
 
-class UserController {
+class RecipeController {
   constructor() {}
-  
+
   static addRecipe: RequestHandler = async (req, res) => {
     try {
-      const result = await service.add(req.body);
+      
+      const result = await service.add(req.body, req.user, req.file);
       res.status(201).send(result);
     } catch (e) {
       res.status(400).send({ error: e.message });
@@ -15,30 +16,23 @@ class UserController {
 
   static deleteRecipe: RequestHandler = async (req, res) => {
     try {
-      const result = await service.del(req.params.id);
+      const result = await service.del(req.params.id, req.user);
       res.status(201).send(result);
     } catch (e) {
       res.status(400).send({ error: e.message });
     }
   };
 
-  static  updateRecipe: RequestHandler = async (req, res) => {
+  static updateRecipe: RequestHandler = async (req, res) => {
     try {
-      const result = await service.update(req.body);
+      const result = await service.update(req.body, req.user, req.file);
       res.status(201).send(result);
     } catch (e) {
       res.status(400).send({ error: e.message });
     }
   };
 
-  static  updateRecipes: RequestHandler = async (req, res) => {
-    try {
-      const result = await service.updateAll(req.body);
-      res.status(201).send(result);
-    } catch (e) {
-      res.status(400).send({ error: e.message });
-    }
-  };
+ 
 
   static getRecipe: RequestHandler = async (req, res) => {
     try {
@@ -49,17 +43,14 @@ class UserController {
     }
   };
 
-  static getAllRecipe: RequestHandler = async (_req, res) => {
+  static getAllRecipe: RequestHandler = async (req, res) => {
     try {
-      const result = await service.getAll();
+      const result = await service.getAll(req.query);
       res.send(result);
     } catch (e) {
       res.status(400).send({ error: e.message });
     }
   };
-
-  
-
 }
 
-export default UserController;
+export default RecipeController;
