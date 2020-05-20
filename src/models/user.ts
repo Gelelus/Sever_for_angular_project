@@ -44,6 +44,12 @@ const userSchema = new Schema({
       ref: "Recipe",
     },
   ],
+  orders: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Order",
+    },
+  ],
 });
 
 userSchema.statics.findByCredentials = async (

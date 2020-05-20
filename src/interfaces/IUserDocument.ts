@@ -7,6 +7,7 @@ export interface IUserDocument extends Document {
     password: string;
     avatarImg: string;
     recipes: string[];
+    orders:string[];
     date: Date;
     firstName: string;
     secondName: string;

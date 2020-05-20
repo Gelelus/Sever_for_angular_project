@@ -54,6 +54,12 @@ const userSchema = new mongoose_1.Schema({
             ref: "Recipe",
         },
     ],
+    orders: [
+        {
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: "Order",
+        },
+    ],
 });
 userSchema.statics.findByCredentials = (email, password) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield User.findOne({ email: email });

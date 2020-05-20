@@ -28,7 +28,7 @@ mongoose_1.default
     useCreateIndex: true,
 })
     .then(() => console.log(`
-       State of connection - ${mongoose_1.default.connection.readyState} 
+       State of connection to DB- ${mongoose_1.default.connection.readyState} 
        0 = disconnected
        1 = connected
        2 = connecting 
@@ -40,7 +40,8 @@ app.use(express_1.default.json());
 app.use(options_1.default);
 app.use("/users", router.userRouter);
 app.use("/recipes", auth_1.default, router.recipeRouter);
+app.use("/orders", auth_1.default, router.orderRouter);
 app.use(express_1.default.static(process.cwd() + "/public"));
 app.listen(port, () => {
-    console.log("server on port " + port);
+    console.log("server start on port " + port);
 });

@@ -1,7 +1,7 @@
 import service from "../services/recipe-service";
 import { RequestHandler } from "express";
 
-class UserController {
+class RecipeController {
   constructor() {}
 
   static addRecipe: RequestHandler = async (req, res) => {
@@ -53,4 +53,4 @@ class UserController {
   };
 }
 
-export default UserController;
+export default RecipeController;

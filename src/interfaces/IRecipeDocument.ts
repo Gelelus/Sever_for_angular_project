@@ -6,5 +6,6 @@ export interface IRecipeDocument extends Document {
   imagePath: string;
   ingredients: { name: string; amount: number }[];
   users: string[];
+  
   date: Date;
 }
