@@ -92,12 +92,6 @@ const login = function (data) {
         };
     });
 };
-const getRecipes = function (id) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const userWithRecipes = yield user_1.default.findById(id).populate("recipes");
-        return userWithRecipes;
-    });
-};
 const addRecipe = function (user, data) {
     return __awaiter(this, void 0, void 0, function* () {
         const recipe = new recipe_1.default(data);
@@ -131,6 +125,11 @@ const addAvatar = function (file, user) {
 const getOrders = function (user) {
     return __awaiter(this, void 0, void 0, function* () {
         return (yield user.populate("orders").execPopulate()).orders;
+    });
+};
+const getRecipes = function (user) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return (yield user.populate("recipes").execPopulate()).recipes;
     });
 };
 exports.default = {

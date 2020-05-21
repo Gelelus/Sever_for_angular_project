@@ -33,7 +33,7 @@ const update = async function (
 
 const del = async function (id: string, user: IUserDocument) {
   if (!user.orders.includes(id)) {
-    throw Error("You do not have permission to delete this recipe.");
+    throw Error("You do not have permission to delete this order.");
   }
   const order = await Order.findById(id);
   if (!order) {
@@ -41,8 +41,7 @@ const del = async function (id: string, user: IUserDocument) {
   }
 
   await order.remove();
-  user.orders = user.orders.filter((resId) => resId !== id);
-  await user.save();
+  
   return { id };
 };
 

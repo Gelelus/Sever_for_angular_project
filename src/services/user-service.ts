@@ -91,12 +91,7 @@ const login = async function (data: { password: string; email: string }) {
   };
 };
 
-const getRecipes = async function (id: string) {
-  // получение всех рецептов пользователя
-  const userWithRecipes = await User.findById(id).populate("recipes");
 
-  return userWithRecipes;
-};
 
 const addRecipe = async function (user: IUserDocument, data: recipeData) {
   const recipe = new Recipe(data);
@@ -110,13 +105,13 @@ const bindRecipe = async function (
   user: IUserDocument,
   data: { name: string }
 ) {
-  //привязка рецепта к пользователю
-  const recipe = await Recipe.findOne({ name: data.name }); //проверка есть ли рицепт в базе
+  
+  const recipe = await Recipe.findOne({ name: data.name }); 
   if (!recipe) {
     throw new Error("Recipe doesn't exist");
   }
 
-  user.recipes.push(recipe._id); //привязка рецепта
+  user.recipes.push(recipe._id); 
   await user.save();
 
   return { user, recipe };
@@ -137,6 +132,11 @@ const addAvatar = async function (file: File, user: IUserDocument) {
 const getOrders = async function (user: IUserDocument) {
   
   return (await user.populate("orders").execPopulate()).orders;
+};
+
+const getRecipes = async function (user: IUserDocument) {
+ 
+  return (await user.populate("recipes").execPopulate()).recipes;
 };
 
 export default {

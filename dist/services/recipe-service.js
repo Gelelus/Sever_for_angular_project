@@ -23,6 +23,7 @@ const add = function (data, user, file) {
             ingredients: ingredients,
             imagePath: "img/recipes/" + file.filename,
         });
+        recipe.users.push(user._id);
         yield recipe.save();
         user.recipes.push(recipe._id);
         yield user.save();
@@ -34,17 +35,35 @@ const get = function (id) {
         return yield recipe_1.default.findById(id);
     });
 };
-const getAll = function (params) {
+const getAll = function ({ startItem = "5", limit = "0", sortOrder = "1", sortName = "name", matchName = "", matchString = "", startDate = new Date(2012, 7, 14), endDate = Date.now(), }) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (params.limit === "0" || (!params.limit && !params.startItem)) {
-            params.limit = "5";
-            params.startItem = "0";
+        let query = {};
+        switch (matchName) {
+            case "name":
+                const name = new RegExp(matchString, "i");
+                query = { name: { $regex: name } };
+                break;
+            case "date":
+                query = {
+                    date: { $gte: startDate, $lt: endDate },
+                };
+                break;
         }
-        const maxRecipes = yield recipe_1.default.countDocuments();
-        const recipes = yield recipe_1.default.find()
-            .skip(+params.startItem)
-            .limit(+params.limit);
-        return { recipes, maxRecipes };
+        const res = yield recipe_1.default.aggregate([
+            { $match: query },
+            { $sort: { [sortName]: +sortOrder } },
+            {
+                $facet: {
+                    recipes: [{ $skip: +startItem }, { $limit: +limit }],
+                    maxRecipes: [
+                        {
+                            $count: "count",
+                        },
+                    ],
+                },
+            },
+        ]);
+        return { recipes: res[0].recipes, maxRecipes: res[0].maxRecipes[0].count };
     });
 };
 const update = function (data, user, file) {
@@ -83,8 +102,6 @@ const del = function (id, user) {
             fs_1.default.unlinkSync("public/" + recipe.imagePath);
         }
         yield recipe.remove();
-        user.recipes = user.recipes.filter((resId) => resId !== id);
-        yield user.save();
         return { id };
     });
 };

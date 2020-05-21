@@ -97,9 +97,9 @@ UserController.addRecipeToUser = (req, res) => __awaiter(void 0, void 0, void 0,
         res.status(400).send({ error: e.message });
     }
 });
-UserController.getUserWithRecipes = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+UserController.getUserRecipes = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield user_service_1.default.getRecipes(req.params.id);
+        const result = yield user_service_1.default.getRecipes(req.user);
         res.status(201).send(result);
     }
     catch (e) {

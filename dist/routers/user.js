@@ -13,7 +13,7 @@ const user_controller_1 = __importDefault(require("../controllers/user-controlle
 const router = express_1.Router();
 router.get("/:id", auth_1.default, user_controller_1.default.getUser);
 router.get("/", auth_1.default, user_controller_1.default.getAllUser);
-router.get("/recipe/:id", auth_1.default, user_controller_1.default.getUserWithRecipes);
+router.get("/get/recipes", auth_1.default, user_controller_1.default.getUserRecipes);
 router.get("/get/orders", auth_1.default, user_controller_1.default.getUserOrders);
 router.post("/", validation_1.default(create_user_dto_1.default), user_controller_1.default.addUser);
 router.post("/recipe/bind", auth_1.default, user_controller_1.default.bindRecipeToUser);

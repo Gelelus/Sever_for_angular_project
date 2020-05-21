@@ -12,7 +12,7 @@ const router = Router();
 
 router.get("/:id", auth, UserController.getUser); // получение одного пользователя
 router.get("/", auth, UserController.getAllUser); // получение всех пользователей
-router.get("/recipe/:id", auth, UserController.getUserWithRecipes); // 
+router.get("/get/recipes", auth, UserController.getUserRecipes); // 
 router.get("/get/orders", auth,UserController.getUserOrders)
 
 router.post("/", validation(validCreateUser),  UserController.addUser); //регистрация
