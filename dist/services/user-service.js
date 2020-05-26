@@ -39,12 +39,37 @@ const add = function (data) {
 };
 const get = function (id) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield user_1.default.findById(id);
+        let user = yield user_1.default.findById(id);
+        if (!user) {
+            throw new Error("user doesn't exists");
+        }
+        return {
+            email: user.email,
+            avatarImg: user.avatarImg,
+            firstName: user.firstName,
+            secondName: user.secondName,
+            date: user.date,
+            phoneNumber: user.phoneNumber,
+            recipes: user.recipes,
+        };
     });
 };
 const getAll = function () {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield user_1.default.find({});
+        return yield user_1.default.aggregate([
+            { $match: {} },
+            {
+                $project: {
+                    avatarImg: 1,
+                    firstName: 1,
+                    secondName: 1,
+                    date: 1,
+                    phoneNumber: 1,
+                    email: 1,
+                    recipes: 1,
+                },
+            },
+        ]);
     });
 };
 const update = function (data, user) {
@@ -143,5 +168,5 @@ exports.default = {
     bindRecipe,
     addAvatar,
     addRecipe,
-    getOrders
+    getOrders,
 };

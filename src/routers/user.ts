@@ -10,8 +10,8 @@ import UserController from "../controllers/user-controller";
 
 const router = Router();
 
-router.get("/:id", auth, UserController.getUser); // получение одного пользователя
-router.get("/", auth, UserController.getAllUser); // получение всех пользователей
+router.get("/:id", UserController.getUser); // получение одного пользователя
+router.get("/", UserController.getAllUser); // получение всех пользователей
 router.get("/get/recipes", auth, UserController.getUserRecipes); // 
 router.get("/get/orders", auth,UserController.getUserOrders)
 

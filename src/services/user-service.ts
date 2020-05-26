@@ -30,11 +30,36 @@ const add = async function (data: { password: string; email: string }) {
 };
 
 const get = async function (id: string) {
-  return await User.findById(id);
+  let user = await User.findById(id);
+  if (!user) {
+    throw new Error("user doesn't exists");
+  }
+  return {
+    email: user.email,
+    avatarImg: user.avatarImg,
+    firstName: user.firstName,
+    secondName: user.secondName,
+    date: user.date,
+    phoneNumber: user.phoneNumber,
+    recipes: user.recipes,
+  };
 };
 
 const getAll = async function () {
-  return await User.find({});
+  return await User.aggregate([
+    { $match: {} },
+    {
+      $project: {
+        avatarImg: 1,
+        firstName: 1,
+        secondName: 1,
+        date: 1,
+        phoneNumber: 1,
+        email: 1,
+        recipes: 1,
+      },
+    },
+  ]);
 };
 
 const update = async function (
@@ -46,7 +71,6 @@ const update = async function (
   },
   user: IUserDocument
 ) {
- 
   user.firstName = data.firstName;
   user.secondName = data.secondName;
   user.phoneNumber = data.phoneNumber;
@@ -91,8 +115,6 @@ const login = async function (data: { password: string; email: string }) {
   };
 };
 
-
-
 const addRecipe = async function (user: IUserDocument, data: recipeData) {
   const recipe = new Recipe(data);
   await recipe.save();
@@ -105,37 +127,33 @@ const bindRecipe = async function (
   user: IUserDocument,
   data: { name: string }
 ) {
-  
-  const recipe = await Recipe.findOne({ name: data.name }); 
+  const recipe = await Recipe.findOne({ name: data.name });
   if (!recipe) {
     throw new Error("Recipe doesn't exist");
   }
 
-  user.recipes.push(recipe._id); 
+  user.recipes.push(recipe._id);
   await user.save();
 
   return { user, recipe };
 };
 
 const addAvatar = async function (file: File, user: IUserDocument) {
-  
-  if(user.avatarImg !== "img/avatars/avatar.png"){
+  if (user.avatarImg !== "img/avatars/avatar.png") {
     fs.unlinkSync("public/" + user.avatarImg);
   }
 
   user.avatarImg = "img/avatars/" + file.filename;
   await user.save();
-  
-  return {imgUrl: "img/avatars/" + file.filename};
+
+  return { imgUrl: "img/avatars/" + file.filename };
 };
 
 const getOrders = async function (user: IUserDocument) {
-  
   return (await user.populate("orders").execPopulate()).orders;
 };
 
 const getRecipes = async function (user: IUserDocument) {
- 
   return (await user.populate("recipes").execPopulate()).recipes;
 };
 
@@ -150,5 +168,5 @@ export default {
   bindRecipe,
   addAvatar,
   addRecipe,
-  getOrders
+  getOrders,
 };

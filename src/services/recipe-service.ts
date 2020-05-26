@@ -27,8 +27,8 @@ const get = async function (id: string) {
 };
 
 const getAll = async function ({
-  startItem = "5",
-  limit = "0",
+  startItem = "0",
+  limit = "5",
   sortOrder = "1",
   sortName = "name",
   matchName = "",
@@ -37,7 +37,7 @@ const getAll = async function ({
   endDate = Date.now(),
 }) {
   let query = {};
- 
+
   switch (matchName) {
     case "name":
       const name = new RegExp(matchString, "i");
@@ -45,7 +45,7 @@ const getAll = async function ({
       break;
     case "date":
       query = {
-        date: { $gte: startDate, $lt: endDate },
+        date: { $gte: new Date(startDate), $lt: new Date(endDate) },
       };
       break;
   }
@@ -65,7 +65,9 @@ const getAll = async function ({
     },
   ]);
 
-
+  if (!res[0].maxRecipes[0]) {
+    return { recipes: [], maxRecipes: 0 };
+  }
   return { recipes: res[0].recipes, maxRecipes: res[0].maxRecipes[0].count };
 };
 

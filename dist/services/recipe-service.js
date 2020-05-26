@@ -35,7 +35,7 @@ const get = function (id) {
         return yield recipe_1.default.findById(id);
     });
 };
-const getAll = function ({ startItem = "5", limit = "0", sortOrder = "1", sortName = "name", matchName = "", matchString = "", startDate = new Date(2012, 7, 14), endDate = Date.now(), }) {
+const getAll = function ({ startItem = "0", limit = "5", sortOrder = "1", sortName = "name", matchName = "", matchString = "", startDate = new Date(2012, 7, 14), endDate = Date.now(), }) {
     return __awaiter(this, void 0, void 0, function* () {
         let query = {};
         switch (matchName) {
@@ -45,7 +45,7 @@ const getAll = function ({ startItem = "5", limit = "0", sortOrder = "1", sortNa
                 break;
             case "date":
                 query = {
-                    date: { $gte: startDate, $lt: endDate },
+                    date: { $gte: new Date(startDate), $lt: new Date(endDate) },
                 };
                 break;
         }
@@ -63,6 +63,9 @@ const getAll = function ({ startItem = "5", limit = "0", sortOrder = "1", sortNa
                 },
             },
         ]);
+        if (!res[0].maxRecipes[0]) {
+            return { recipes: [], maxRecipes: 0 };
+        }
         return { recipes: res[0].recipes, maxRecipes: res[0].maxRecipes[0].count };
     });
 };
