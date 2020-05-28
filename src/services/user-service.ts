@@ -45,21 +45,67 @@ const get = async function (id: string) {
   };
 };
 
-const getAll = async function () {
-  return await User.aggregate([
-    { $match: {} },
+const getAll = async function ({
+  startItem = "0",
+  limit = "5",
+  sortOrder = "1",
+  sortName = "email",
+  matchName = "",
+  matchString = "",
+  startDate = new Date(2012, 7, 14),
+  endDate = Date.now(),
+}) {
+  let query = {};
+
+  switch (matchName) {
+    case "name":
+      const name = new RegExp(matchString, "i");
+      query = { name: { $regex: name } };
+      break;
+    case "email":
+      const email = new RegExp(matchString, "i");
+      query = { email: { $regex: email } };
+      break;
+    case "date":
+      query = {
+        date: { $gte: new Date(startDate), $lt: new Date(endDate) },
+      };
+      break;
+  }
+  
+  const res = await User.aggregate([
+    { $match: query },
+    { $sort: { [sortName]: +sortOrder } },
     {
-      $project: {
-        avatarImg: 1,
-        firstName: 1,
-        secondName: 1,
-        date: 1,
-        phoneNumber: 1,
-        email: 1,
-        recipes: 1,
+      $facet: {
+        recipes: [
+          { $skip: +startItem },
+          { $limit: +limit },
+          {
+            $project: {
+              avatarImg: 1,
+              firstName: 1,
+              secondName: 1,
+              date: 1,
+              phoneNumber: 1,
+              email: 1,
+              recipes: 1,
+            },
+          },
+        ],
+        maxUsers: [
+          {
+            $count: "count",
+          },
+        ],
       },
     },
   ]);
+
+  if (!res[0].maxUsers[0]) {
+    return { users: [], maxUsers: 0 };
+  }
+  return { users: res[0].recipes, maxUsers: res[0].maxUsers[0].count };
 };
 
 const update = async function (

@@ -11,7 +11,7 @@ import UserController from "../controllers/user-controller";
 const router = Router();
 
 router.get("/:id", UserController.getUser); 
-router.get("/", UserController.getAllUser); /
+router.get("/", UserController.getAllUser); 
 router.get("/get/recipes", auth, UserController.getUserRecipes); 
 router.get("/get/orders", auth,UserController.getUserOrders)
 
