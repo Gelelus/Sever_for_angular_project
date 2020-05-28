@@ -9,3 +9,5 @@ const recipe_1 = __importDefault(require("../routers/recipe"));
 exports.recipeRouter = recipe_1.default;
 const order_1 = __importDefault(require("../routers/order"));
 exports.orderRouter = order_1.default;
+const message_1 = __importDefault(require("../routers/message"));
+exports.messageRouter = message_1.default;

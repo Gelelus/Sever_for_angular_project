@@ -1,45 +1,20 @@
 import express from "express";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
+import socketIo from "socket.io";
+import http from "http";
 
-import options from "./middleware/options";
-import * as router from "./routers/export-router";
-import auth from "./middleware/auth";
+import router from "./routers/index";
+import { ServerConfiguration } from "./config/server.config";
 
-dotenv.config();
-
-if (!process.env.MONGO_DB) {
-  throw new Error("please create .env file as .env.example");
-}
-mongoose
-  .connect(process.env.MONGO_DB, {
-    useNewUrlParser: true,
-    useFindAndModify: false,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-  })
-  .then(() =>
-    console.log(
-      `
-       State of connection to DB- ${mongoose.connection.readyState} 
-       0 = disconnected
-       1 = connected
-       2 = connecting 
-       3 = disconnecting
-      `
-    )
-  );
 
 const app = express();
+const server = http.createServer(app);
+const io = socketIo.listen(server);
 const port = process.env.PORT || 8080;
 
-app.use(express.json());
-app.use(options);
-app.use("/users", router.userRouter);
-app.use("/recipes", auth, router.recipeRouter);
-app.use("/orders", auth, router.orderRouter)
-app.use(express.static(process.cwd() + "/public"));
+ServerConfiguration.mongoDB();
+ServerConfiguration.chat(io);
+app.use(router);
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log("server start on port " + port);
 });

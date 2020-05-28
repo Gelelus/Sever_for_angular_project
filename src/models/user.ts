@@ -2,6 +2,7 @@ import { Schema, model } from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
+import Recipe from "../models/recipe";
 import { IUserDocument } from "../interfaces/IUserDocument";
 import { IUserModel } from "../interfaces/IUserModel";
 
@@ -33,7 +34,7 @@ const userSchema = new Schema({
     trim: true,
     default: "User",
   },
-  phoneNumber:{
+  phoneNumber: {
     type: String,
     trim: true,
     default: "+375",
@@ -88,6 +89,15 @@ userSchema.pre("save", async function (next) {
   if (user.isModified("password")) {
     user.password = await bcrypt.hash(user.password, 8);
   }
+  next();
+});
+
+userSchema.pre("remove", async function (next) {
+  Recipe.updateMany(
+    { users: this._id },
+    { $pull: { users: this._id } },
+    { multi: true }
+  ).exec();
   next();
 });
 

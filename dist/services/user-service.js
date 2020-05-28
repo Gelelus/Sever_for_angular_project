@@ -39,12 +39,71 @@ const add = function (data) {
 };
 const get = function (id) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield user_1.default.findById(id);
+        let user = yield user_1.default.findById(id);
+        if (!user) {
+            throw new Error("user doesn't exists");
+        }
+        return {
+            email: user.email,
+            avatarImg: user.avatarImg,
+            firstName: user.firstName,
+            secondName: user.secondName,
+            date: user.date,
+            phoneNumber: user.phoneNumber,
+            recipes: user.recipes,
+        };
     });
 };
-const getAll = function () {
+const getAll = function ({ startItem = "0", limit = "5", sortOrder = "1", sortName = "email", matchName = "", matchString = "", startDate = new Date(2012, 7, 14), endDate = Date.now(), }) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield user_1.default.find({});
+        let query = {};
+        switch (matchName) {
+            case "name":
+                const name = new RegExp(matchString, "i");
+                query = { name: { $regex: name } };
+                break;
+            case "email":
+                const email = new RegExp(matchString, "i");
+                query = { email: { $regex: email } };
+                break;
+            case "date":
+                query = {
+                    date: { $gte: new Date(startDate), $lt: new Date(endDate) },
+                };
+                break;
+        }
+        const res = yield user_1.default.aggregate([
+            { $match: query },
+            { $sort: { [sortName]: +sortOrder } },
+            {
+                $facet: {
+                    recipes: [
+                        { $skip: +startItem },
+                        { $limit: +limit },
+                        {
+                            $project: {
+                                avatarImg: 1,
+                                firstName: 1,
+                                secondName: 1,
+                                date: 1,
+                                phoneNumber: 1,
+                                email: 1,
+                                recipes: 1,
+                            },
+                        },
+                    ],
+                    maxUsers: [
+                        {
+                            $count: "count",
+                        },
+                    ],
+                },
+            },
+        ]);
+        if (!res[0].maxUsers[0]) {
+            return { users: [], maxUsers: 0 };
+        }
+        return { users: res[0].recipes, maxUsers: res[0].maxUsers[0].count };
     });
 };
 const update = function (data, user) {
@@ -92,12 +151,6 @@ const login = function (data) {
         };
     });
 };
-const getRecipes = function (id) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const userWithRecipes = yield user_1.default.findById(id).populate("recipes");
-        return userWithRecipes;
-    });
-};
 const addRecipe = function (user, data) {
     return __awaiter(this, void 0, void 0, function* () {
         const recipe = new recipe_1.default(data);
@@ -133,6 +186,11 @@ const getOrders = function (user) {
         return (yield user.populate("orders").execPopulate()).orders;
     });
 };
+const getRecipes = function (user) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return (yield user.populate("recipes").execPopulate()).recipes;
+    });
+};
 exports.default = {
     add,
     get,
@@ -144,5 +202,5 @@ exports.default = {
     bindRecipe,
     addAvatar,
     addRecipe,
-    getOrders
+    getOrders,
 };

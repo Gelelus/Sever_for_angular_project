@@ -15,7 +15,7 @@ const add = async function (
     ingredients: ingredients,
     imagePath: "img/recipes/" + file.filename,
   });
-
+  recipe.users.push(user._id);
   await recipe.save();
   user.recipes.push(recipe._id);
   await user.save();
@@ -26,17 +26,49 @@ const get = async function (id: string) {
   return await Recipe.findById(id);
 };
 
-const getAll = async function (params: { startItem: string; limit: string }) {
-  if (params.limit === "0" || (!params.limit && !params.startItem)) {
-    params.limit = "5";
-    params.startItem = "0";
-  }
-  const maxRecipes = await Recipe.countDocuments();
-  const recipes = await Recipe.find()
-    .skip(+params.startItem)
-    .limit(+params.limit);
+const getAll = async function ({
+  startItem = "0",
+  limit = "5",
+  sortOrder = "1",
+  sortName = "name",
+  matchName = "",
+  matchString = "",
+  startDate = new Date(2012, 7, 14),
+  endDate = Date.now(),
+}) {
+  let query = {};
 
-  return { recipes, maxRecipes };
+  switch (matchName) {
+    case "name":
+      const name = new RegExp(matchString, "i");
+      query = { name: { $regex: name } };
+      break;
+    case "date":
+      query = {
+        date: { $gte: new Date(startDate), $lt: new Date(endDate) },
+      };
+      break;
+  }
+
+  const res = await Recipe.aggregate([
+    { $match: query },
+    { $sort: { [sortName]: +sortOrder } },
+    {
+      $facet: {
+        recipes: [{ $skip: +startItem }, { $limit: +limit }],
+        maxRecipes: [
+          {
+            $count: "count",
+          },
+        ],
+      },
+    },
+  ]);
+
+  if (!res[0].maxRecipes[0]) {
+    return { recipes: [], maxRecipes: 0 };
+  }
+  return { recipes: res[0].recipes, maxRecipes: res[0].maxRecipes[0].count };
 };
 
 const update = async function (
@@ -88,8 +120,7 @@ const del = async function (id: string, user: IUserDocument) {
   }
 
   await recipe.remove();
-  user.recipes = user.recipes.filter((resId) => resId !== id);
-  await user.save();
+
   return { id };
 };
 

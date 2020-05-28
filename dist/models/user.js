@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const recipe_1 = __importDefault(require("../models/recipe"));
 const userSchema = new mongoose_1.Schema({
     password: {
         type: String,
@@ -88,6 +89,12 @@ userSchema.pre("save", function (next) {
         if (user.isModified("password")) {
             user.password = yield bcryptjs_1.default.hash(user.password, 8);
         }
+        next();
+    });
+});
+userSchema.pre("remove", function (next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        recipe_1.default.updateMany({ users: this._id }, { $pull: { users: this._id } }, { multi: true }).exec();
         next();
     });
 });

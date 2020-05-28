@@ -39,9 +39,9 @@ class UserController {
     }
   };
 
-  static getAllUser: RequestHandler = async (_req, res) => {
+  static getAllUser: RequestHandler = async (req, res) => {
     try {
-      const result = await service.getAll();
+      const result = await service.getAll(req.query);
       res.send(result);
     } catch (e) {
       res.status(400).send({ error: e.message });
@@ -84,9 +84,9 @@ class UserController {
     }
   };
 
-  static getUserWithRecipes: RequestHandler = async (req, res) => {
+  static getUserRecipes: RequestHandler = async (req, res) => {
     try {
-      const result = await service.getRecipes(req.params.id);
+      const result = await service.getRecipes(req.user);
       res.status(201).send(result);
     } catch (e) {
       res.status(400).send({ error: e.message });
