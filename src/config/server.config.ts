@@ -1,5 +1,15 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import authIO from "../middleware/ioAuth";
+import { IUserDocument } from "../interfaces/IUserDocument";
+
+declare global {
+  namespace SocketIO {
+    interface Socket {
+      user: IUserDocument;
+    }
+  }
+}
 
 export class ServerConfiguration {
   static mongoDB() {
@@ -28,5 +38,23 @@ export class ServerConfiguration {
       );
   }
 
-  
+  static chat(io: SocketIO.Server) {
+    io.use(authIO).on("connection", (socket) => {
+      console.log("user connected");
+
+      socket.on("disconnecting", () => {
+        console.log("user disconnected");
+      });
+
+      socket.on("new-message", (message) => {
+        console.log(message);
+        io.emit("new-message", {
+          message: message,
+          img: socket.user.avatarImg,
+          email: socket.user.email,
+          date: Date.now(),
+        });
+      });
+    });
+  }
 }

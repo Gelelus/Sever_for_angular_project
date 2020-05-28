@@ -4,7 +4,7 @@ import { File } from "../interfaces/MulterFileFilter";
 import { IUserDocument } from "../interfaces/IUserDocument";
 import User from "../models/user";
 import Recipe from "../models/recipe";
-import { recipeData } from "../interfaces/recipeData";
+import { recipeData } from "../interfaces/recipe.model";
 
 const add = async function (data: { password: string; email: string }) {
   const userTest = await User.findOne({ email: data.email });

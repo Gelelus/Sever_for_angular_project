@@ -1,8 +1,17 @@
 import { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
+
 import User from "../models/user";
-import { DataStoredInToken } from "../interfaces/dataStoredInToken";
-import {} from "../interfaces/RequestCustom"; // расширения интерфейса Request
+import { IUserDocument } from '../interfaces/IUserDocument';
+import { Token } from "../interfaces/token.model";
+
+declare global {
+    namespace Express {
+      interface Request {
+        user: IUserDocument,    
+      }
+    }
+  }
 
 const auth: RequestHandler = async (req, res, next) => {
   try {
@@ -13,7 +22,7 @@ const auth: RequestHandler = async (req, res, next) => {
 
     const token = header.replace("Bearer ", "");
 
-    const decoded = jwt.verify(token, "expressapp") as DataStoredInToken;
+    const decoded = jwt.verify(token, "expressapp") as Token;
     
     const user = await User.findOne({ _id: decoded._id });
 

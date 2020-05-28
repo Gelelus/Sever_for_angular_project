@@ -1,17 +1,15 @@
 import jwt from "jsonwebtoken";
-import { DataStoredInToken } from "../interfaces/dataStoredInToken";
+import { Token } from "../interfaces/token.model";
 import User from "../models/user";
-
 
 
 const authIO = async (socket: SocketIO.Socket, next: (err?: any) => void) => {
   try {
     if (socket.handshake.query && socket.handshake.query.token) {
-      
       const decoded = jwt.verify(
         socket.handshake.query.token,
         "expressapp"
-      ) as DataStoredInToken;
+      ) as Token;
 
       const user = await User.findOne({ _id: decoded._id });
 
