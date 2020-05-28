@@ -20,6 +20,7 @@ npm install
 ## Running
 
 ```bash
+tsc
 npm start
 ```
 
